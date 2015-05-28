@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
-import model.map.Map;
+import model.mapmanager.MapManager;
 
 /**
  *
@@ -20,7 +20,7 @@ public class FrameRobocup extends JFrame {
     private Controller c;
     
     // Constructors
-    public FrameRobocup(Controller c, Map m){
+    public FrameRobocup(Controller c, MapManager m){
         super("Robocup Rescue");
         this.c = c;
         initFrame(m);
@@ -34,7 +34,7 @@ public class FrameRobocup extends JFrame {
     }
     
     // Methods
-    private void initFrame(Map m){
+    private void initFrame(MapManager m){
         getContentPane().setLayout(new BorderLayout(10,10));
 
         map = new PanelMap();
@@ -123,7 +123,7 @@ public class FrameRobocup extends JFrame {
     //utilitaires pour installer des boutons et des menus
     private void addButton(JComponent p, String name, String tooltiptext, String imageName){
         JButton b;
-	if ((imageName == null) || (imageName.equals(""))) {
+	if ((imageName == null) || (imageName.equals(""))){
             b = (JButton)p.add(new JButton(name));
         } else {
             java.net.URL u = this.getClass().getResource(imageName);

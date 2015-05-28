@@ -1,15 +1,8 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import model.graph.Edge;
@@ -22,15 +15,18 @@ import model.graph.Node;
  */
 public class PanelMap extends JPanel implements Observer {
 
+    // Attributes
     private int width;
     private int height;
     private Graph gh;
     
+    // Constructors
     public PanelMap(){
         super();
         this.gh = new Graph();
     }
     
+    // Methods
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -46,8 +42,17 @@ public class PanelMap extends JPanel implements Observer {
         }
     }
     
+    private void addNode(Node n){
+        this.gh.getListNodes().add(n);
+    }
+    
+    private void addEdge(Edge e){
+        this.gh.getListEdges().add(e);
+    }
+    
     private void drawNode(Node n, Graphics g){
         Color c = Color.BLACK;
+        g.setColor(c);
         if (n.getFire() == 0){
             g.fillOval((int)n.getX()-5, (int)n.getY()-5, 10, 10);
         } else {
@@ -63,6 +68,7 @@ public class PanelMap extends JPanel implements Observer {
     
     private void drawEdge(Edge e, Graphics g){
         Color c = Color.BLUE;
+        g.setColor(c);
         g.drawLine((int)e.getNode1().getX(), (int)e.getNode1().getY(), (int)e.getNode2().getX(), (int)e.getNode2().getY());
     }
     
@@ -80,15 +86,15 @@ public class PanelMap extends JPanel implements Observer {
     }
     
     @Override
-    public void update(Observable o, Object o1) {
+    public void update(Observable o, Object o1){
         this.repaint();
     }
 
-    public void setWidth(int width) {
+    // Getters & Setters
+    public void setWidth(int width){
         this.width = width;
     }
-
-    public void setHeight(int height) {
+    public void setHeight(int height){
         this.height = height;
     }
     

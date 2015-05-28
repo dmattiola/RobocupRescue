@@ -45,8 +45,7 @@ public class Node {
     public String getType(){
         return type;
     }
-
-    public int getFire() {
+    public int getFire(){
         return fire;
     }
 }
