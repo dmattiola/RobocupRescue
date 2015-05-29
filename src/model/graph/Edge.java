@@ -1,10 +1,12 @@
 package model.graph;
 
+import java.util.Observable;
+
 /**
  *
  * @author Dylan
  */
-public class Edge {
+public class Edge extends Observable {
     
     // Attributes
     private Node node1;

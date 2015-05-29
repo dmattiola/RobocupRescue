@@ -6,6 +6,7 @@ import model.algorithme.Algorithme;
 import model.graph.Graph;
 import model.graph.Node;
 import model.robot.Robot;
+import view.PanelMap;
 
 /**
  *
@@ -17,10 +18,13 @@ public class MapManager extends Observable implements Runnable {
     private Algorithme a;
     private ArrayList<Robot> listRobots;
     private ArrayList<Node> listFires;
+    private PanelMap panmap;
+    private boolean isRunning;
     
-    public MapManager(Graph gr, Algorithme a){
-        this.gr = gr;
+    public MapManager(Algorithme a, PanelMap panmap){
+        this.gr = panmap.getGh();
         this.a = a;
+        this.panmap = panmap;
         this.listRobots = new ArrayList<>();
         this.listFires = new ArrayList<>();
     }
@@ -35,7 +39,7 @@ public class MapManager extends Observable implements Runnable {
         Map<Integer,ArrayList<Node>> map = null;
         for (Robot r : listRobots){
             if (r.getState().equals("FREE")){
-                map = this.a.shortestTrip(gr, n, r);
+                map = this.a.shortestTrip(getGr(), n, r);
                 for (int val : map.keySet()){
                     if (pathValue > val){
                         pathValue = val;
@@ -48,7 +52,7 @@ public class MapManager extends Observable implements Runnable {
     }
 
     private void updateFires(){
-        for (Node n : this.gr.getListNodes()){
+        for (Node n : this.getGr().getListNodes()){
             if (n.getFire() != 0){
                 this.listFires.add(n);
             }
@@ -57,8 +61,8 @@ public class MapManager extends Observable implements Runnable {
     
     @Override
     public void run() {
-        boolean isRunning = true;
-        while(isRunning){
+        this.isRunning = true;
+        while(this.isRunning){
             // maj feu +++ regarder si robot peut eteindre feu +++ 
             // apres prend un de feu ++++ prend robot plus pres ++++ etat bouger +++ bouger selon court chemin (avec maj etat 
             // robot fini eteidnre feu deviennet libre
@@ -73,6 +77,10 @@ public class MapManager extends Observable implements Runnable {
                 Logger.getLogger(MapManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public Graph getGr() {
+        return gr;
     }
     
 }

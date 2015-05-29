@@ -15,10 +15,12 @@ public class Graph {
     
     // Constructors
     public Graph(){
+        this.listEdges = new ArrayList<>();
+        this.listNodes = new ArrayList<>();
     }
     
     // Methods
-    private void createFile(){
+    public void createFile(){
         File f = new File("graphmap.xml");
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(f));

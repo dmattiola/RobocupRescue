@@ -23,7 +23,6 @@ public class PanelMap extends JPanel implements Observer {
     // Constructors
     public PanelMap(){
         super();
-        this.gh = new Graph();
     }
     
     // Methods
@@ -32,38 +31,40 @@ public class PanelMap extends JPanel implements Observer {
         super.paintComponent(g);
         Color c = g.getColor();
 	Dimension dim = getSize();
-	g.setColor(Color.white);
+	g.setColor(Color.BLACK);
 	g.fillRect(0,0,dim.width, dim.height);
         try {
-            Image im = ImageIO.read(new File("resources/mapsixieme.jpg"));
-            g.drawImage(im, 0, 0, this);
+            Image im = ImageIO.read(new File("src\\resources\\mapsixieme.jpg"));
+            g.drawImage(im, 50, 15, this);
         } catch (IOException e) {
             System.out.println("Painting Image Error : " + e.getMessage());
         }
+        showGraph(g);
     }
     
-    private void addNode(Node n){
-        this.gh.getListNodes().add(n);
+    public void addNode(Node n){
+        this.getGh().getListNodes().add(n);
+        update(n,this);
     }
     
-    private void addEdge(Edge e){
-        this.gh.getListEdges().add(e);
+    public void addEdge(Edge e){
+        this.getGh().getListEdges().add(e);
+        update(e,this);
     }
     
     private void drawNode(Node n, Graphics g){
-        Color c = Color.BLACK;
-        g.setColor(c);
+        g.setColor(Color.BLACK);
         if (n.getFire() == 0){
-            g.fillOval((int)n.getX()-5, (int)n.getY()-5, 10, 10);
+            g.drawOval((int)n.getX()-5, (int)n.getY()-5, 12, 12);
         } else {
             try {
-                Image im = ImageIO.read(new File("resources/fire.png"));
+                Image im = ImageIO.read(new File("src\\resources\\fire.png"));
                 g.drawImage(im, 10, 10, this);
             } catch (IOException e) {
             System.out.println("Painting Image Error : " + e.getMessage());
             }
         }
-        g.drawString(Integer.toString(n.getId()), (int)n.getX(), (int)n.getY());
+        g.drawString(Integer.toString(n.getId()), (int)n.getX()-17, (int)n.getY());
     }
     
     private void drawEdge(Edge e, Graphics g){
@@ -74,12 +75,12 @@ public class PanelMap extends JPanel implements Observer {
     
     private void showGraph(Graphics g){
         if (!this.gh.getListNodes().isEmpty()){
-            for(Node n : this.gh.getListNodes()){
+            for(Node n : this.getGh().getListNodes()){
                 this.drawNode(n, g);
             }
         }
         if (!this.gh.getListEdges().isEmpty()){
-            for(Edge e : this.gh.getListEdges()){
+            for(Edge e : this.getGh().getListEdges()){
                 this.drawEdge(e, g);
             }
         }
@@ -96,6 +97,14 @@ public class PanelMap extends JPanel implements Observer {
     }
     public void setHeight(int height){
         this.height = height;
+    }
+
+    public Graph getGh() {
+        return gh;
+    }
+
+    public void setGh(Graph gh) {
+        this.gh = gh;
     }
     
 }

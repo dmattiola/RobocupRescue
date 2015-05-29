@@ -1,10 +1,12 @@
 package model.graph;
 
+import java.util.Observable;
+
 /**
  *
  * @author Dylan
  */
-public class Node {
+public class Node extends Observable {
     
     // Attributes
     private int id;
@@ -48,4 +50,5 @@ public class Node {
     public int getFire(){
         return fire;
     }
+    
 }

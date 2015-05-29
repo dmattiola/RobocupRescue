@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
-import model.mapmanager.MapManager;
+import model.graph.Graph;
 
 /**
  *
@@ -20,21 +20,28 @@ public class FrameRobocup extends JFrame {
     private Controller c;
     
     // Constructors
-    public FrameRobocup(Controller c, MapManager m){
+    public FrameRobocup(Controller c, Graph gr){
         super("Robocup Rescue");
         this.c = c;
-        initFrame(m);
+        initFrame(gr);
 	this.addWindowListener(new WindowAdapter() {
             @Override
 	    public void windowClosing(WindowEvent arg0) {
                 super.windowClosing(arg0);
 		System.exit(0);
 	    }
-	});        
+	});
     }
     
     // Methods
-    private void initFrame(MapManager m){
+    public void quitter(){
+        System.exit(0);
+    }
+    public void effacer(){
+	map.repaint();
+    }
+    
+    private void initFrame(Graph g){
         getContentPane().setLayout(new BorderLayout(10,10));
 
         map = new PanelMap();
@@ -43,6 +50,7 @@ public class FrameRobocup extends JFrame {
         map.setPreferredSize(new Dimension(600,400));
         map.setWidth(600);
         map.setHeight(400);
+        map.setGh(g);
 
         getContentPane().add(map,"Center");
 
@@ -58,9 +66,8 @@ public class FrameRobocup extends JFrame {
         addButton(toolBar,"Effacer","Nouveau dessin","/icons/index.png");
 
         toolBar.add(Box.createRigidArea(HGAP));
-        addButton(toolBar, "Lancer", "Lancer", null);
-        addButton(toolBar, "Suspendre / Reprendre", "Suspendre / Reprendre", null);
-        addButton(toolBar, "Arrêter", "Arrêter", null);
+        addButton(toolBar, "Ajouter Noeud", "Ajouter Noeud", null);
+        addButton(toolBar, "Ajouter Arc", "Ajouter Arc", null);
         addButton(toolBar, "Ajouter Incendie", "Ajouter Incendie", null);
         addButton(toolBar, "Ajouter Robot", "Ajouter Robot", null);
 
@@ -84,6 +91,8 @@ public class FrameRobocup extends JFrame {
 
         JMenu menuGraph=new JMenu("Graphe");
         menubar.add(menuGraph);
+        addMenuItem(menuGraph, "Ajouter Noeud", "Ajouter Noeud", -1);
+        addMenuItem(menuGraph, "Ajouter Arc", "Ajouter Arc", -1);
         addMenuItem(menuGraph, "Sauvegarder", "Sauvegarder", -1);
         addMenuItem(menuGraph, "Charger", "Charger", -1);
 
@@ -101,19 +110,20 @@ public class FrameRobocup extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // les boutons du bas
-        /*JPanel p2 = new JPanel(new GridLayout());
-        JButton b20 = new JButton("Proc1");
+        JPanel p2 = new JPanel(new GridLayout());
+        JButton b20 = new JButton("Lancer");
         p2.add(b20);
         b20.addActionListener(c);
-        JButton b21 = new JButton("Proc2");
+        JButton b21 = new JButton("Suspendre / Reprendre");
         p2.add(b21);
         b21.addActionListener(c);
-        JButton b22 = new JButton("Proc3");
+        JButton b22 = new JButton("Arrêter");
         p2.add(b22);
+        
         b22.addActionListener(c);
 
         getContentPane().add(p2,"South");
-*/
+
         pack();
         setVisible(true);
         c.setFr(this);
