@@ -35,11 +35,13 @@ public class PanelMap extends JPanel implements Observer {
 	g.fillRect(0,0,dim.width, dim.height);
         try {
             Image im = ImageIO.read(new File("src\\resources\\mapsixieme.jpg"));
-            g.drawImage(im, 50, 15, this);
+            g.drawImage(im, 0, 0, this);
         } catch (IOException e) {
             System.out.println("Painting Image Error : " + e.getMessage());
         }
-        showGraph(g);
+        if (this.gh.isShown()){
+           showGraph(g); 
+        }
     }
     
     public void addNode(Node n){
@@ -52,16 +54,21 @@ public class PanelMap extends JPanel implements Observer {
         update(e,this);
     }
     
+    public void addFire(Node n){
+        this.getGh().getListNodes().add(n);
+        update(n,this);
+    }
+    
     private void drawNode(Node n, Graphics g){
         g.setColor(Color.BLACK);
-        if (n.getFire() == 0){
+        if (!n.getType().equals("INCENDIE")){
             g.drawOval((int)n.getX()-5, (int)n.getY()-5, 12, 12);
         } else {
             try {
-                Image im = ImageIO.read(new File("src\\resources\\fire.png"));
-                g.drawImage(im, 10, 10, this);
+                Image im = ImageIO.read(new File("src\\resources\\fire.gif"));
+                g.drawImage(im, (int)n.getX()-6, (int)n.getY()-12, this);
             } catch (IOException e) {
-            System.out.println("Painting Image Error : " + e.getMessage());
+                System.out.println("Painting Image Error : " + e.getMessage());
             }
         }
         g.drawString(Integer.toString(n.getId()), (int)n.getX()-17, (int)n.getY());

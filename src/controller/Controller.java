@@ -2,6 +2,11 @@ package controller;
 
 import java.awt.event.*;
 import java.util.logging.*;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import model.graph.Edge;
 import model.graph.Node;
 import model.mapmanager.MapManager;
 import view.FrameRobocup;
@@ -19,6 +24,7 @@ public class Controller implements ActionListener, MouseListener {
     private Thread th;
     private MapManager manager;
     private String action = "";
+    private Node selectedNode = null;
     
     // Constructors
     public Controller(){ }
@@ -33,21 +39,24 @@ public class Controller implements ActionListener, MouseListener {
                 break;
             case "Suspendre / Reprendre":
                 try {
-                    th.wait();
+                    this.th.wait();
                 } catch (InterruptedException ex) {
                     System.out.println("Error wait thread");
                     Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 break;
             case "Arrêter":
-                th.stop();
+                this.th.stop();
                 break;
             case "Sauvegarder":
-                pm.getGh().createFile();
+                this.pm.getGh().createFile();
                 break;
             case "Charger":
+                this.pm.setGh(pm.getGh().loadFile());
+                this.pm.repaint();
                 break;
             case "Ajouter Incendie":
+                this.action = action;
                 break;
             case "Ajouter Robot":
                 break;
@@ -55,12 +64,23 @@ public class Controller implements ActionListener, MouseListener {
                 this.action = action;
                 break;
             case "Ajouter Arc":
+                this.action = action;
+                break;
+            case "Afficher":
+                this.fr.changeHide("Cacher");
+                this.pm.getGh().setShown(true);
+                this.pm.repaint();
+                break;
+            case "Cacher":
+                this.fr.changeHide("Afficher");
+                this.pm.getGh().setShown(false);
+                this.pm.repaint();
                 break;
             case "Effacer":
-                fr.effacer();
+                this.fr.effacer();
                 break;
             case "Quitter":
-                fr.quitter();
+                this.fr.quitter();
                 break;
             default:
                 break;
@@ -74,10 +94,44 @@ public class Controller implements ActionListener, MouseListener {
         System.out.println("Clic en : "+x_+" // "+y_);
         if (this.action.equals("Ajouter Noeud")){
             pm.addNode(new Node(x_,y_,"BASE"));
+            this.action = "";
         }
-        this.action = "";
+        if (this.action.equals("Ajouter Arc")){
+            Node node1 = findNode(x_, y_); 
+            if (node1 == null){
+                JOptionPane.showMessageDialog(pm, "Vous n'avez pas cliqué sur un noeud.");
+            } else {
+                if (selectedNode != null){     
+                    pm.addEdge(new Edge(node1,selectedNode,"PLAT"));
+                    this.action = "";
+                    this.selectedNode = null;
+                }
+                else {
+                    selectedNode = node1;
+                }
+            }
+        }
+        if (this.action.equals("Ajouter Incendie")){
+            Node n = findNode(x_, y_);
+            if (n == null){
+                pm.addNode(new Node(x_,y_,"INCENDIE"));
+            } else {
+                n.kindleFire();
+                this.pm.repaint();
+            }
+        }
+       
     }
 
+    private Node findNode(int x, int y){
+        for (Node n : pm.getGh().getListNodes()){
+            if (x > n.getX()-6 && x < n.getX()+6 && y < n.getY()+6 && y > n.getY()-6){
+                return n;
+            }
+        }
+        return null;
+    }
+    
     @Override
     public void mousePressed(MouseEvent me){ }
     @Override

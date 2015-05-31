@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import model.graph.Graph;
+import model.graph.Node;
 
 /**
  *
@@ -37,8 +38,17 @@ public class FrameRobocup extends JFrame {
     public void quitter(){
         System.exit(0);
     }
+    
     public void effacer(){
+        map.setGh(new Graph());
 	map.repaint();
+        Node.setNb_node(0);
+        JOptionPane.showMessageDialog(this, "Vous avez effacé le graphe en cours.");
+    }
+    public void changeHide(String name){
+        ((JButton)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(1)).setName(name);
+        ((JButton)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(1)).setText(name);
+        ((JButton)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(1)).setToolTipText(name);
     }
     
     private void initFrame(Graph g){
@@ -46,10 +56,10 @@ public class FrameRobocup extends JFrame {
 
         map = new PanelMap();
         map.setBackground(Color.white);
-        map.setSize(new Dimension(600,400));
-        map.setPreferredSize(new Dimension(600,400));
+        map.setSize(new Dimension(600,480));
+        map.setPreferredSize(new Dimension(600,480));
         map.setWidth(600);
-        map.setHeight(400);
+        map.setHeight(480);
         map.setGh(g);
 
         getContentPane().add(map,"Center");
@@ -64,10 +74,11 @@ public class FrameRobocup extends JFrame {
         getContentPane().add(buttonPanel,"North");
 
         addButton(toolBar,"Effacer","Nouveau dessin","/icons/index.png");
-
+        addButton(toolBar,"Cacher","Cacher",null);
         toolBar.add(Box.createRigidArea(HGAP));
         addButton(toolBar, "Ajouter Noeud", "Ajouter Noeud", null);
         addButton(toolBar, "Ajouter Arc", "Ajouter Arc", null);
+        toolBar.add(Box.createRigidArea(HGAP));
         addButton(toolBar, "Ajouter Incendie", "Ajouter Incendie", null);
         addButton(toolBar, "Ajouter Robot", "Ajouter Robot", null);
 
@@ -123,7 +134,7 @@ public class FrameRobocup extends JFrame {
         b22.addActionListener(c);
 
         getContentPane().add(p2,"South");
-
+        
         pack();
         setVisible(true);
         c.setFr(this);

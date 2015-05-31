@@ -7,6 +7,10 @@ import java.util.Observable;
  * @author Dylan
  */
 public class Node extends Observable {
+
+    public static void setNb_node(int aNb_node) {
+        nb_node = aNb_node;
+    }
     
     // Attributes
     private int id;
@@ -26,12 +30,25 @@ public class Node extends Observable {
         nb_node++;
     }
     
-    // Methods
-    private void kindleFire(){
-        this.fire = 50;
-    }
-    private void extinguishFire(){
+    public Node(int id, int x, int y, String type){
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.type = type;
         this.fire = 0;
+    }
+    
+    // Methods
+    public void kindleFire(){
+        this.fire = 50;
+        this.type = "INCENDIE";
+        this.setChanged();
+        this.notifyObservers();
+    }
+    
+    public void extinguishFire(){
+        this.fire = 0;
+        this.type = "BASE";
     }
     
     // Getters & Setters
