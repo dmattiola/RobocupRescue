@@ -21,6 +21,11 @@ public class MapManager extends Observable implements Runnable {
     private PanelMap panmap;
     private boolean isRunning;
     
+    public MapManager() {
+        this.gr = new Graph();
+        this.listRobots = new ArrayList<>();
+        this.listFires = new ArrayList<>();
+    }
     public MapManager(Algorithme a, PanelMap panmap){
         this.gr = panmap.getGh();
         this.a = a;
@@ -33,7 +38,7 @@ public class MapManager extends Observable implements Runnable {
         this.listRobots.add(r);
     }
     
-    private Robot closestRobot(Node n){
+    public Robot closestRobot(Node n){
         int pathValue = Integer.MAX_VALUE;
         Robot closest = null;
         Map<Integer,ArrayList<Node>> map = null;
@@ -82,5 +87,12 @@ public class MapManager extends Observable implements Runnable {
     public Graph getGr() {
         return gr;
     }
+    public ArrayList<Robot> getListRobot() {
+        return this.listRobots;
+    }
+    public void setGr(Graph g) {
+        this.gr=g;
+    }
+
     
 }
