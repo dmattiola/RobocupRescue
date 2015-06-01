@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Node;
+import model.graph.TypeEdge;
+import model.graph.TypeNode;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -55,20 +57,20 @@ public class GraphJUnitTest {
         ArrayList<Node> list = g.getListNodes();
         for (Node n : list){
             if(n.getId() == 0){
-                assertTrue("Test noeud feu 1 erreur", n.getType() == "INCENDIE");
+                assertTrue("Test noeud feu 1 erreur", n.getType() == TypeNode.INCENDIE);
                 assertTrue("Test noeud feu 2 erreur", n.getFire()== 50);
             }
             if(n.getId() == 1){
                 System.out.println("1" + n.getType() + "1");
                 
-                assertTrue("Test noeud 1 erreur", n.getType().contains("BASE"));
+                assertTrue("Test noeud 1 erreur", n.getType() == TypeNode.NORMAL);
                 assertTrue("Test noeud 2 erreur", n.getFire()== 0);
             }
         }
         ArrayList<Edge> list2 = g.getListEdges();
         for (Edge e : list2){
             if(e.getNode1().getId() == 0 && e.getNode1().getId() == 1){
-                assertTrue("Test arc 1 plat erreur", e.getType() == "PLAT");    
+                assertTrue("Test arc 1 plat erreur", e.getType() == TypeEdge.PLAT);    
             }
             /*if(e.getNode1().getId() == 1 && e.getNode1().getId() == 2){
                 assertTrue("Test arc 1 plat ok", e.getType() == "PLAT");

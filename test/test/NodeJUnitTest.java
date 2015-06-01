@@ -6,6 +6,7 @@
 package test;
 
 import model.graph.Node;
+import model.graph.TypeNode;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -34,8 +35,8 @@ public class NodeJUnitTest {
     
     @Before
     public void setUp() {
-        nodeI = new Node(0,0,"INCENDIE");
-        nodeB = new Node(1,1, "BASE");
+        nodeI = new Node(0,0,TypeNode.INCENDIE);
+        nodeB = new Node(1,1, TypeNode.NORMAL);
     }
     
     @After
@@ -49,12 +50,12 @@ public class NodeJUnitTest {
      public void testKindleFire() {
         nodeB.kindleFire();
         assertTrue("Feu allumé", nodeB.getFire() == 50);
-        assertTrue("Feu allumé", nodeB.getType() == "INCENDIE");
+        assertTrue("Feu allumé", nodeB.getType() == TypeNode.INCENDIE);
      }
      @Test
      public void testExtinguishFire() {
         nodeI.extinguishFire();
         assertTrue("Feu etein", nodeI.getFire() ==0);
-        assertTrue("Feu allumé", nodeB.getType() == "BASE");
+        assertTrue("Feu allumé", nodeB.getType() == TypeNode.NORMAL);
      }
 }

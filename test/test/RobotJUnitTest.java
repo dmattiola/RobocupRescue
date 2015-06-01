@@ -7,6 +7,8 @@ package test;
 
 import model.graph.Edge;
 import model.graph.Node;
+import model.graph.TypeEdge;
+import model.graph.TypeNode;
 import model.robot.Robot;
 import model.robot.RobotCaterpillar;
 import model.robot.RobotCrossCountry;
@@ -38,8 +40,8 @@ public class RobotJUnitTest {
     
     @Before
     public void setUp() {
-        eesc = new Edge(new Node(0,0,"BASE"), new Node(1,2,"BASE"), "ESCARPE");
-        einon = new Edge(new Node(0,0,"BASE"), new Node(1,2,"BASE"), "INONDE");
+        eesc = new Edge(new Node(0,0,TypeNode.NORMAL), new Node(1,2,TypeNode.NORMAL), TypeEdge.ESCARPE);
+        einon = new Edge(new Node(0,0,TypeNode.NORMAL), new Node(1,2,TypeNode.NORMAL), TypeEdge.INONDE);
     }
     
     @After
