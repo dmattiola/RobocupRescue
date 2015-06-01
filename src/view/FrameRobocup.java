@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import model.algorithme.AlgorithmeParcoursProfondeur;
 import model.algorithme.algotest;
 import model.graph.Graph;
 import model.graph.Node;
@@ -30,7 +31,7 @@ public class FrameRobocup extends JFrame {
     public FrameRobocup(Controller c, Graph gr){
         super("Robocup Rescue");
         this.c = c;
-        c.setManager(new MapManager(new algotest(),gr));
+        c.setManager(new MapManager(new AlgorithmeParcoursProfondeur(),gr));
         initFrame(gr);
         c.getManager().addObserver(map);
 	this.addWindowListener(new WindowAdapter() {

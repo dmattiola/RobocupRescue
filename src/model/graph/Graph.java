@@ -99,6 +99,12 @@ public class Graph extends Observable {
     public ArrayList<Node> getListNodes(){
         return listNodes;
     }
+    public void setListNodes (ArrayList<Node> list){
+        this.listNodes = list;
+    }
+        public void setListEdge (ArrayList<Edge> list){
+        this.listEdges = list;
+    }
     public ArrayList<Edge> getListEdges(){
         return listEdges;
     }

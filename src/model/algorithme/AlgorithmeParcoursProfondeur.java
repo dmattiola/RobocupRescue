@@ -12,6 +12,7 @@ import java.util.Map;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Node;
+import model.graph.TypeNode;
 import model.robot.Robot;
 
 /**
@@ -19,31 +20,38 @@ import model.robot.Robot;
  * @author Anthony
  */
 public class AlgorithmeParcoursProfondeur extends Algorithme{
-    public enum COULEUR {BLANC, GRIS, NOIR};
+    public enum COULEUR {BLANC, NOIR};
     public Graph ng;
     public Map<Node,COULEUR> couleur_noeud;
     public Map<Node,Double> distance_pour_ce_noeud;
     public Map<Node,ArrayList<Node>> chemin_vers_ce_noeud;
     public AlgorithmeParcoursProfondeur() {
         super();
-        couleur_noeud = new Hashtable<>();
-        distance_pour_ce_noeud = new Hashtable<>();
-        chemin_vers_ce_noeud = new Hashtable<>();
     }
     @Override
     public Map<Integer, ArrayList<Node>> shortestTrip(Graph g, Node n, Robot r) {
+        couleur_noeud = new Hashtable<>();
+        distance_pour_ce_noeud = new Hashtable<>();
+        chemin_vers_ce_noeud = new Hashtable<>();
         Map<Integer,ArrayList<Node>> resultat = new Hashtable<>();
         ng = NouveauGraph(g, r);
-        Node current = n;
+        Node current = r.getN();
         ArrayList<Node> file = new ArrayList<>();
         file.add(current);
         couleur_noeud.replace(current, COULEUR.NOIR);
+        ArrayList temp = new ArrayList<Node>();
+        temp.add(current);
+        chemin_vers_ce_noeud.replace(current, temp);
         while (!file.isEmpty()){
             current = file.get(0);
+            file.remove(0);
             System.out.println("");
             for(Node enf : listeEnfant(ng, current)){
                 double dist = distance_pour_ce_noeud.get(current);  
-                ArrayList chemversnoeud = chemin_vers_ce_noeud.get(current);
+                ArrayList<Node> chemversnoeud = new ArrayList<>();
+                chemversnoeud = doublonChemin(current);
+                //chemversnoeud = chemin_vers_ce_noeud.get(current);
+                
                 if(couleur_noeud.get(enf)!=COULEUR.NOIR) {
                     file.add(enf);
                     couleur_noeud.replace(enf, COULEUR.NOIR);
@@ -53,6 +61,7 @@ public class AlgorithmeParcoursProfondeur extends Algorithme{
                     chemin_vers_ce_noeud.replace(enf, chemversnoeud);
                     if(enf.getId()==n.getId()) {
                         resultat.put((int)dist, chemversnoeud);
+                        return resultat;
                     }
                 }
             } 
@@ -61,18 +70,21 @@ public class AlgorithmeParcoursProfondeur extends Algorithme{
     }
     public Graph NouveauGraph(Graph g, Robot r){
         Graph nouv = new Graph();
-        
+        ArrayList<Node> resnode = new ArrayList<>();
+        ArrayList<Edge> resedge = new ArrayList<>();
         for (Node n : g.getListNodes()) {
-            ng.getListNodes().add(n);
+            resnode.add(n);
             couleur_noeud.put(n, COULEUR.BLANC);
             distance_pour_ce_noeud.put(n,0.0);
             chemin_vers_ce_noeud.put(n, new ArrayList<Node>());
         }
         for(Edge e : g.getListEdges()) {
             if(r.possibleTrip(e)) {
-                ng.getListEdges().add(e);
+                resedge.add(e);
             }
         }
+        nouv.setListNodes(resnode);
+        nouv.setListEdge(resedge);
         return nouv;
     }
     public ArrayList<Node> listeEnfant(Graph g, Node n){
@@ -89,5 +101,14 @@ public class AlgorithmeParcoursProfondeur extends Algorithme{
         }
         return list;
     }
-
+    public ArrayList<Node> doublonChemin(Node n) {
+        ArrayList<Node> res = new ArrayList<>();
+        for(Node ne : chemin_vers_ce_noeud.get(n)) {
+            Node newn = new Node(ne.getId(), (int)ne.getX(), (int)ne.getY(), ne.getType());
+            if (ne.getType() == TypeNode.INCENDIE)
+                newn.kindleFire();
+            res.add(newn);
+        }
+        return res;
+    }
 }
