@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package model.algorithme;
 
 import java.util.ArrayList;
@@ -14,12 +13,14 @@ import model.robot.Robot;
 
 /**
  *
- * @author Dylan
+ * @author Anthony
  */
-public abstract class Algorithme {
+public class AlgorithmeParcoursProfondeur extends Algorithme{
+
     
-    public Algorithme(){ }
-    
-    public abstract Map<Integer,ArrayList<Node>> shortestTrip(Graph g, Node n, Robot r);
+    @Override
+    public Map<Integer, ArrayList<Node>> shortestTrip(Graph g, Node n, Robot r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
