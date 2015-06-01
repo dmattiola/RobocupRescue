@@ -55,7 +55,6 @@ public class MapManager extends Observable implements Runnable {
         }
         return closest;
     }
-
     private void updateFires(){
         for (Node n : this.getGr().getListNodes()){
             if (n.getFire() != 0){
