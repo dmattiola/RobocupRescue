@@ -7,6 +7,7 @@
 package model.algorithme;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 import model.graph.Graph;
 import model.graph.Node;
@@ -20,6 +21,7 @@ public abstract class Algorithme {
     
     public Algorithme(){ }
     
-    public abstract Map<Integer,ArrayList<Node>> shortestTrip(Graph g, Node n, Robot r);
+    public abstract LinkedList<Node> shortestTrip(Graph g, Node n, Robot r);
+    public abstract Map<Node,Integer> getDistance();
     
 }

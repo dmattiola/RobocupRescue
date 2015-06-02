@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
-import model.algorithme.algotest;
+import model.algorithme.Dijkstra;
 import model.graph.Graph;
 import model.graph.Node;
 import model.graph.TypeEdge;
@@ -30,7 +30,7 @@ public class FrameRobocup extends JFrame {
     public FrameRobocup(Controller c, Graph gr){
         super("Robocup Rescue");
         this.c = c;
-        c.setManager(new MapManager(new algotest(),gr));
+        c.setManager(new MapManager(new Dijkstra(),gr));
         initFrame(gr);
         c.getManager().addObserver(map);
 	this.addWindowListener(new WindowAdapter() {

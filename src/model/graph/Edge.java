@@ -37,4 +37,8 @@ public class Edge extends Observable {
     public TypeEdge getType(){
         return type;
     }
+
+    public double getLength() {
+        return length;
+    }
 }

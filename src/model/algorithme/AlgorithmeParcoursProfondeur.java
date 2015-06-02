@@ -6,6 +6,7 @@
 package model.algorithme;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 import model.graph.Graph;
 import model.graph.Node;
@@ -17,9 +18,13 @@ import model.robot.Robot;
  */
 public class AlgorithmeParcoursProfondeur extends Algorithme{
 
-    
     @Override
-    public Map<Integer, ArrayList<Node>> shortestTrip(Graph g, Node n, Robot r) {
+    public LinkedList<Node> shortestTrip(Graph g, Node n, Robot r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<Node, Integer> getDistance() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -27,6 +27,7 @@ public class PanelMap extends JPanel implements Observer {
     public PanelMap(MapManager map){
         super();
         this.map = map;
+        this.map.setM(this);
     }
     
     // Methods

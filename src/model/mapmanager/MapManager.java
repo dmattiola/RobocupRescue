@@ -1,6 +1,5 @@
 package model.mapmanager;
 
-import java.awt.Graphics;
 import java.util.*;
 import java.util.logging.*;
 import model.algorithme.Algorithme;
@@ -23,6 +22,7 @@ public class MapManager extends Observable implements Runnable {
     private ArrayList<Node> listFires;
     private boolean isRunning;
     private boolean wait;
+    private PanelMap m;
     
     public MapManager(Algorithme a, Graph g){
         this.gr = g;
@@ -35,14 +35,16 @@ public class MapManager extends Observable implements Runnable {
     private Robot closestRobot(Node n){
         int pathValue = Integer.MAX_VALUE;
         Robot closest = null;
-        Map<Integer,ArrayList<Node>> map = null;
+        Map<Node,Integer> map = null;
         for (Robot r : getListRobots()){
             if (r.getState() == StateRobot.FREE){
-                map = this.a.shortestTrip(getGr(), n, r);
-                for (int val : map.keySet()){
-                    if (pathValue > val){
-                        pathValue = val;
+                LinkedList<Node> rr = (this.a.shortestTrip(this.gr, n, r));
+                map = this.a.getDistance();
+                if (map.get(n)!= null){
+                    if (pathValue > map.get(n)){
+                        pathValue = map.get(n);
                         closest = r;
+                        r.setListNodes(rr);
                     }
                 }
             }
@@ -51,12 +53,15 @@ public class MapManager extends Observable implements Runnable {
     }
 
     public void updateFires(){
+        ArrayList<Node> fires = new ArrayList<>();
         for (Node n : this.getGr().getListNodes()){
             if (n.getType() == TypeNode.INCENDIE){
-                this.getListFires().add(n);
+                fires.add(n);
             }
         }
+        this.setListFires(fires);
     }
+    
     
     private ArrayList<Robot> getListBusyRobot(){
         ArrayList<Robot> listBusy = new ArrayList<>();
@@ -67,33 +72,52 @@ public class MapManager extends Observable implements Runnable {
         }
         return listBusy;
     }
+    private void updateBusyRobots(){
+        for(Robot r : this.getListRobots()){
+            for(Node n : this.getListFires()){
+                if (r.getN().equals(n)){
+                    r.setState(StateRobot.BUSY);
+                }
+            }   
+        }
+    }
     
     @Override
     public void run() {
         this.isRunning = true;
-        ArrayList<Robot> listBusy = new ArrayList<>();
+        ArrayList<Robot> listBusy,listMoving = new ArrayList<>();
         while(this.isRunning){
-            updateFires();
-            for (Node n : this.getListFires()){
+            // MISE A JOUR DES FEUX
+            updateFires();            
+            // RECUPERE LES ROBOTS OCCUPES
+            listBusy = getListBusyRobot();
+            // ON FAIT BOUGER LES ROBOTS MOVING
+            listMoving = getListMovingRobot();
+            for(Robot r : listMoving){
+                r.move();
+            }
+            // ON PARCOURS LA LISTE DES FEUX QUI NE SONT PAS OCCUPES
+            for (Node n : this.listFires){
                 if (!n.isFilled()){
-                    Robot r = closestRobot(n);
-                    r.progress(this.a.shortestTrip(getGr(), n, r).get(0));
+                    // ON CHERCHE LE ROBOT LE PLUS PRES
+                    Robot r = closestRobot(n);   
+                    // SI ON LE TROUVE IL AVANCE
+                    if (r != null){
+                        n.setFilled(true);
+                        r.move();
+                    }
                 }
             }
-            listBusy = getListBusyRobot();
+            // MISE A JOUR DES ROBOTS OCCUPEES
+            // ON A DONC LES ROBOTS OCCUPES, LES ROBOTS EN MOUVEMENT sont à jour
+            updateBusyRobots();
+            // POUR LES ROBOTS OCCUPES cad ETEIGNE LE FEU
             for (Robot r : listBusy){
                 r.extinguishFire();
             }
-            /*
-            mettre à jour les feus
-            
-            parcours liste feu non occupé et on lui affecte un robot le plus pres
-            fai bouger les robots qui vont eteindre un feu
-            une seconde passe
-            les robots occupés font leur ation sur le feu à éteindre
-            */
             this.setChanged();
             this.notifyObservers();
+            this.m.repaint();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -132,6 +156,20 @@ public class MapManager extends Observable implements Runnable {
 
     public void setGr(Graph gr) {
         this.gr = gr;
+    }
+
+    public void setM(PanelMap m) {
+        this.m = m;
+    }
+
+    private ArrayList<Robot> getListMovingRobot() {
+        ArrayList<Robot> listMoving = new ArrayList<>();
+        for (Robot r : this.getListRobots()){
+            if (r.getState() == StateRobot.MOVING){
+                listMoving.add(r);
+            }
+        }
+        return listMoving;
     }
     
 }

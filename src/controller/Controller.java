@@ -4,7 +4,6 @@ import java.awt.event.*;
 import java.util.logging.*;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import model.algorithme.algotest;
 import model.graph.Edge;
 import model.graph.Node;
 import model.graph.TypeEdge;
