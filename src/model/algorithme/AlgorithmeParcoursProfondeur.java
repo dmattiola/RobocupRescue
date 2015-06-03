@@ -7,8 +7,10 @@ package model.algorithme;
 
 import java.util.LinkedList;
 import java.util.Map;
+import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Node;
+import model.graph.TypeNode;
 import model.robot.Robot;
 
 /**
