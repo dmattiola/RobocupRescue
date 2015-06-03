@@ -3,6 +3,7 @@ package model.mapmanager;
 import java.util.*;
 import java.util.logging.*;
 import model.algorithme.Algorithme;
+import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Node;
 import model.graph.TypeNode;
@@ -94,7 +95,7 @@ public class MapManager extends Observable implements Runnable {
             // ON FAIT BOUGER LES ROBOTS MOVING
             listMoving = getListMovingRobot();
             for(Robot r : listMoving){
-                r.move();
+                r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
             }
             // ON PARCOURS LA LISTE DES FEUX QUI NE SONT PAS OCCUPES
             for (Node n : this.listFires){
@@ -104,7 +105,7 @@ public class MapManager extends Observable implements Runnable {
                     // SI ON LE TROUVE IL AVANCE
                     if (r != null){
                         n.setFilled(true);
-                        r.move();
+                        r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
                     }
                 }
             }
@@ -124,6 +125,15 @@ public class MapManager extends Observable implements Runnable {
                 Logger.getLogger(MapManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    private Edge findEdge(ArrayList<Edge> listEdge, Node n1, Node n2) {
+        for (Edge e : listEdge){
+            if ((e.getNode1().equals(n1) && e.getNode2().equals(n2))||(e.getNode1().equals(n2) && e.getNode2().equals(n1))){
+                return e;
+            }
+        }
+        return null;
     }
 
     public Graph getGr() {

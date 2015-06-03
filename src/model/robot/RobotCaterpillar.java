@@ -16,24 +16,47 @@ import view.PanelMap;
  */
 public class RobotCaterpillar extends Robot {
 
+    private String image = "src\\resources\\RobotCaterpillar.gif";
+    private int capacity;
+    private int position;
+    private int speed;
+    
     public RobotCaterpillar(Node n){
         super(n);
+        this.capacity = 40;
+        this.speed = 100;
     }
     
     @Override
     public boolean possibleTrip(Edge e){
         return (e.getType() != TypeEdge.ESCARPE);
     }
+    
+    @Override
+    public String getImage() {
+        return this.image;
+    }
 
     @Override
-    public void drawRobot(Graphics g, int x, int y, PanelMap pm) {
-        try {
-            Image im = ImageIO.read(new File("src\\resources\\RobotCaterpillar.gif"));
-            g.drawImage(im, x, y, pm);
-        } catch (IOException e) {
-            System.out.println("Painting Image Error : " + e.getMessage());
-        }
+    public int getCapacity() {
+        return this.capacity;
     }
+
+    @Override
+    public int getPosition() {
+        return this.position;
+    }
+
+    @Override
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    @Override
+    public int getSpeed() {
+        return this.speed;
+    }
+
 
 
 }

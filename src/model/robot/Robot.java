@@ -1,11 +1,10 @@
 package model.robot;
 
-import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Observable;
 import model.graph.Edge;
 import model.graph.Node;
-import view.PanelMap;
 
 /**
  *
@@ -14,10 +13,8 @@ import view.PanelMap;
 public abstract class Robot extends Observable {
     
     // Attributes
-    private String name;
     private Node n;
     private StateRobot state;
-    private int capacite;
     private LinkedList<Node> listNodes;
     
     // CONSTRUCTORS
@@ -29,20 +26,27 @@ public abstract class Robot extends Observable {
     public Robot(Node n){
         this.n = n;
         this.state = StateRobot.FREE;
-        this.capacite = 20;
     }
     
     // METHODS
 
     /**
      * Move a robot to the first node in his list
+     * @param e
     */
-    public void move(){
-        this.getN().setFilled(false);
-        this.n = getListNodes().get(0);
-        this.getListNodes().remove(n);
-        this.getN().setFilled(true);
-        this.state = StateRobot.MOVING;
+    public void move(Edge e){
+        if (e != null){
+            if (this.getPosition()+this.getSpeed() >= e.getLength()){
+                this.getN().setFilled(false);
+                this.n = getListNodes().get(0);
+                this.getListNodes().remove(n);
+                this.getN().setFilled(true);
+                this.setPosition(0);
+            } else {
+                this.setPosition(this.getPosition()+this.getSpeed());
+            }
+            this.state = StateRobot.MOVING;
+        }
         this.setChanged();
         this.notifyObservers();
     }
@@ -64,15 +68,11 @@ public abstract class Robot extends Observable {
      * @return true if the robot can pass, else false 
     */
     public abstract boolean possibleTrip(Edge e);
-
-    /**
-     * Methods to draw a robot (specific to each robot)
-     * @param g Graphics
-     * @param x (abcisse) high left point of the robot image
-     * @param y (ordonnee) high left point of the robot image
-     * @param pm panel in which the robot is drawn
-    */
-    public abstract void drawRobot(Graphics g, int x, int y, PanelMap pm);
+    public abstract String getImage();
+    public abstract int getCapacity();
+    public abstract int getPosition();
+    public abstract void setPosition(int position);
+    public abstract int getSpeed();
     
     // GETTERS & SETTERS
 
@@ -123,4 +123,5 @@ public abstract class Robot extends Observable {
     public void setListNodes(LinkedList<Node> listNodes) {
         this.listNodes = listNodes;
     }
+
 }

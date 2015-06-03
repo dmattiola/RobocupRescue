@@ -87,6 +87,7 @@ public class Graph extends Observable {
         return null;
     }
     
+  
     // Getters & Setters
     public ArrayList<Node> getListNodes(){
         return listNodes;

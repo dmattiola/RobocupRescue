@@ -15,8 +15,15 @@ import view.PanelMap;
  */
 public class RobotCrossCountry extends Robot {
 
+    private String image = "src\\resources\\RobotCrossCountry.gif";
+    private int capacity;
+    private int position;
+    private int speed;
+    
     public RobotCrossCountry(Node n){
         super(n);
+        this.capacity = 20;
+        this.speed = 75;
     }
 
     @Override
@@ -25,14 +32,26 @@ public class RobotCrossCountry extends Robot {
     }
 
     @Override
-    public void drawRobot(Graphics g, int x, int y, PanelMap pm) {
-        try {
-            Image im = ImageIO.read(new File("src\\resources\\RobotCrossCountry.gif"));
-            g.drawImage(im, x, y, pm);
-        } catch (IOException e) {
-            System.out.println("Painting Image Error : " + e.getMessage());
-        }
+    public String getImage() {
+        return this.image;
     }
 
-    
+    @Override
+    public int getCapacity() {
+        return this.capacity;
+    }
+
+    @Override
+    public int getPosition() {
+        return this.position;
+    }
+
+    @Override
+    public void setPosition(int position) {
+        this.position = position;
+    }
+     @Override
+    public int getSpeed() {
+        return this.speed;
+    }
 }

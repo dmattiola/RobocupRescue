@@ -80,15 +80,15 @@ public class Dijkstra extends Algorithme {
     private void findDistanceMinimal(Node n){
         List<Node> neighbours = getNeighbours(n);
         for(Node node : neighbours){
-            if (getShortestDistance(node) > getShortestDistance(n)+getDistance(n,node)){
-                this.distance.put(node, getShortestDistance(n)+getDistance(n,node));
+            if (getShortestDistance(node) > getShortestDistance(n)+getLongueur(n,node)){
+                this.distance.put(node, getShortestDistance(n)+getLongueur(n,node));
                 this.predecessors.put(node, n);
                 this.unmarkeddNodes.add(node);
             }
         }
     }
     
-    private int getDistance(Node n1, Node n2){
+    private int getLongueur(Node n1, Node n2){
         for (Edge e : this.listEdges){
             if ((e.getNode1().equals(n1) && e.getNode2().equals(n2))||((e.getNode1().equals(n2) && e.getNode2().equals(n1)))){
                 return (int)e.getLength();
@@ -125,6 +125,7 @@ public class Dijkstra extends Algorithme {
             path.add(nde);
         }
         Collections.reverse(path);
+        path.remove(0);
         return path;
     }
 

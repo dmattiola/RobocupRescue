@@ -95,6 +95,22 @@ public class PanelMap extends JPanel implements Observer {
         g.drawLine((int)e.getNode1().getX(), (int)e.getNode1().getY(), (int)e.getNode2().getX(), (int)e.getNode2().getY());
     }
     
+     /**
+     * Methods to draw a robot (specific to each robot)
+     * @param g Graphics
+     * @param x (abcisse) high left point of the robot image
+     * @param y (ordonnee) high left point of the robot image
+     * @param r robot drawn
+    */
+    public void drawRobot(Graphics g, int x, int y, Robot r){
+        try {
+            Image im = ImageIO.read(new File(r.getImage()));
+            g.drawImage(im, x, y, this);
+        } catch (IOException e) {
+            System.out.println("Painting Image Error : " + e.getMessage());
+        }
+    }
+    
     private void showGraph(Graphics g){
         if (!this.map.getGr().getListNodes().isEmpty()){
             for(Node n : this.getMap().getGr().getListNodes()){
@@ -123,7 +139,7 @@ public class PanelMap extends JPanel implements Observer {
 
     public void showRobots(Graphics g) {
         for(Robot r : this.getMap().getListRobots()){
-            r.drawRobot(g, (int)r.getN().getX()-10, (int)r.getN().getY()-12, this);
+            drawRobot(g, (int)r.getN().getX()-10, (int)r.getN().getY()-12, r);
         }
     }
     
