@@ -116,7 +116,7 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
             if (node1 == null){
                 JOptionPane.showMessageDialog(pm, "Vous n'avez pas cliqué sur un noeud.");
             } else {
-                if (selectedNode != null){     
+                if (selectedNode != null && !node1.equals(selectedNode)){     
                     pm.addEdge(new Edge(node1,selectedNode,this.fr.getTypeedge()));
                     this.action = "";
                     this.selectedNode = null;

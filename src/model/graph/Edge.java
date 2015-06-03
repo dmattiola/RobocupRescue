@@ -40,4 +40,8 @@ public class Edge extends Observable {
     public double getLength(){
         return this.length;
     }
+
+    public void setType(TypeEdge type) {
+        this.type = type;
+    }
 }

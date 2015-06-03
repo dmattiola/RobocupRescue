@@ -8,6 +8,7 @@ package model.algorithme;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import model.graph.Edge;
 import model.graph.Graph;
@@ -20,6 +21,16 @@ import model.robot.Robot;
  * @author Anthony
  */
 public class AlgorithmeParcoursProfondeur extends Algorithme{
+
+    @Override
+    public LinkedList<Node> shortestTrip(Graph g, Node n, Robot r) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<Node, Integer> getDistance() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     public enum COULEUR {BLANC, NOIR};
     public Graph ng;
     public Map<Node,COULEUR> couleur_noeud;
@@ -28,8 +39,7 @@ public class AlgorithmeParcoursProfondeur extends Algorithme{
     public AlgorithmeParcoursProfondeur() {
         super();
     }
-    @Override
-    public Map<Integer, ArrayList<Node>> shortestTrip(Graph g, Node n, Robot r) {
+        public Map<Integer, ArrayList<Node>> shortestTrip_(Graph g, Node n, Robot r) {
         couleur_noeud = new Hashtable<>();
         distance_pour_ce_noeud = new Hashtable<>();
         chemin_vers_ce_noeud = new Hashtable<>();
@@ -38,10 +48,10 @@ public class AlgorithmeParcoursProfondeur extends Algorithme{
         Node current = r.getN();
         ArrayList<Node> file = new ArrayList<>();
         file.add(current);
-        couleur_noeud.replace(current, COULEUR.NOIR);
+       // couleur_noeud.replace(current, COULEUR.NOIR);
         ArrayList temp = new ArrayList<Node>();
         temp.add(current);
-        chemin_vers_ce_noeud.replace(current, temp);
+        //chemin_vers_ce_noeud.replace(current, temp);
         while (!file.isEmpty()){
             current = file.get(0);
             file.remove(0);
@@ -54,11 +64,11 @@ public class AlgorithmeParcoursProfondeur extends Algorithme{
                 
                 if(couleur_noeud.get(enf)!=COULEUR.NOIR) {
                     file.add(enf);
-                    couleur_noeud.replace(enf, COULEUR.NOIR);
+              //      couleur_noeud.replace(enf, COULEUR.NOIR);
                     dist = dist + ng.findEdge(current, enf).getLength();
-                    distance_pour_ce_noeud.replace(enf, dist);
+                //    distance_pour_ce_noeud.replace(enf, dist);
                     chemversnoeud.add(enf);
-                    chemin_vers_ce_noeud.replace(enf, chemversnoeud);
+                  //  chemin_vers_ce_noeud.replace(enf, chemversnoeud);
                     if(enf.getId()==n.getId()) {
                         resultat.put((int)dist, chemversnoeud);
                         return resultat;

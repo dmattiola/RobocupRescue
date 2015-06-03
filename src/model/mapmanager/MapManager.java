@@ -6,6 +6,7 @@ import model.algorithme.Algorithme;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Node;
+import model.graph.TypeEdge;
 import model.graph.TypeNode;
 import model.robot.Robot;
 import model.robot.StateRobot;
@@ -115,6 +116,7 @@ public class MapManager extends Observable implements Runnable {
             // POUR LES ROBOTS OCCUPES cad ETEIGNE LE FEU
             for (Robot r : listBusy){
                 r.extinguishFire();
+                updateEdges(r);
             }
             this.setChanged();
             this.notifyObservers();
@@ -127,6 +129,20 @@ public class MapManager extends Observable implements Runnable {
         }
     }
     
+    private void updateEdges(Robot r){
+        ArrayList<Edge> listEdge = new ArrayList<>();
+        for (Edge e : this.gr.getListEdges()){
+            if (e.getNode1().equals(r.getN()) || e.getNode2().equals(r.getN())){
+                listEdge.add(e);
+            }
+        }
+        Random rand = new Random();
+        for (Edge e : listEdge){
+            if (rand.nextInt(100) < 25){
+                e.setType(TypeEdge.INONDE);
+            }
+        }
+    }
     private Edge findEdge(ArrayList<Edge> listEdge, Node n1, Node n2) {
         for (Edge e : listEdge){
             if ((e.getNode1().equals(n1) && e.getNode2().equals(n2))||(e.getNode1().equals(n2) && e.getNode2().equals(n1))){
