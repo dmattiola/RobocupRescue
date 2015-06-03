@@ -53,15 +53,17 @@ public class RobotJUnitTest {
     //
     @Test
     public void testTrip() {
-        r = new RobotCaterpillar();
-        System.out.println("dd"+r.possibleTrip(eesc));
+        r = new RobotCaterpillar(eesc.getNode1());
         assertTrue("Erreur caterpillar escarpe",!r.possibleTrip(eesc));
+        r = new RobotCaterpillar(einon.getNode1());
         assertTrue("Erreur caterpillar inondé", r.possibleTrip(einon));
-        r = new RobotCrossCountry();
+        r = new RobotCrossCountry(eesc.getNode1());
         assertTrue("Erreur Cross Country escarpe" , r.possibleTrip(eesc));
+        r = new RobotCrossCountry(einon.getNode1());
         assertTrue("Erreur Cross Country inondé" , r.possibleTrip(einon));
-        r = new RobotLegs();
+        r = new RobotLegs(eesc.getNode1());
         assertTrue("Erreur Legs escarpe" , r.possibleTrip(eesc));
+        r = new RobotLegs(einon.getNode1());
         assertTrue("Erreur Legs inondé" , !r.possibleTrip(einon));
         
         

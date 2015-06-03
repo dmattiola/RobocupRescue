@@ -86,11 +86,24 @@ public class Graph extends Observable {
         }
         return null;
     }
-    
-  
+    public Edge findEdge(Node n1, Node n2){
+        for(Edge e: getListEdges()){
+            if(e.getNode1().getId() == n1.getId() && e.getNode2().getId() == n2.getId())
+                return e;
+            if(e.getNode1().getId() == n2.getId() && e.getNode2().getId() == n1.getId())
+                return e;
+        }
+        return null;
+    }
     // Getters & Setters
     public ArrayList<Node> getListNodes(){
         return listNodes;
+    }
+    public void setListNodes (ArrayList<Node> list){
+        this.listNodes = list;
+    }
+        public void setListEdge (ArrayList<Edge> list){
+        this.listEdges = list;
     }
     public ArrayList<Edge> getListEdges(){
         return listEdges;
