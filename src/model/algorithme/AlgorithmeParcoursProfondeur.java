@@ -46,7 +46,7 @@ public class AlgorithmeParcoursProfondeur extends Algorithme{
         LinkedList<Node> temp = new LinkedList<Node>();
         Node current = r.getN();
         file.add(current);
-        couleur_noeud.replace(current, COULEUR.NOIR);
+        couleur_noeud.put(current, COULEUR.NOIR);
         temp.add(current);
         while (!file.isEmpty()){
             current = file.get(0);
@@ -57,11 +57,11 @@ public class AlgorithmeParcoursProfondeur extends Algorithme{
                 chemversnoeud = (LinkedList<Node>) chemin_vers_ce_noeud.get(current).clone();
                 if(couleur_noeud.get(enf)!=COULEUR.NOIR) {
                     file.add(enf);
-                    couleur_noeud.replace(enf, COULEUR.NOIR);
+                    couleur_noeud.put(enf, COULEUR.NOIR);
                     dist = dist + getLongueur(current, enf);
-                    distance_pour_ce_noeud.replace(enf, dist);
+                    distance_pour_ce_noeud.put(enf, dist);
                     chemversnoeud.add(enf);
-                    chemin_vers_ce_noeud.replace(enf, chemversnoeud);
+                    chemin_vers_ce_noeud.put(enf, chemversnoeud);
                     if(enf.getId()==n.getId()) {
                         resultat = chemversnoeud;
                         System.out.println("dist : " + dist);
