@@ -21,6 +21,7 @@ public class FrameRobocup extends JFrame {
     // Attributes
     public static final Dimension VGAP = new Dimension(1,5);
     public static final Dimension HGAP = new Dimension(5,1);
+    public static final String[] listAglo = {" Dijkstra ", " A * ", " Largeur " };
     private PanelMap map;
     private Controller c;
     private TypeEdge typeedge = TypeEdge.PLAT;
@@ -40,6 +41,7 @@ public class FrameRobocup extends JFrame {
 		System.exit(0);
 	    }
 	});
+        c.changeButtons(true);
     }
     
     // Methods
@@ -84,6 +86,8 @@ public class FrameRobocup extends JFrame {
 
         addButton(toolBar,"Effacer","Nouveau dessin","/icons/index.png");
         addButton(toolBar,"Cacher","Cacher",null);
+        toolBar.add(Box.createRigidArea(HGAP));
+        toolBar.add(new JLabel("Ajouter :"));
         toolBar.add(Box.createRigidArea(HGAP));
         addButton(toolBar, "Noeud", "Ajouter Noeud", null);
         toolBar.add(Box.createRigidArea(HGAP));
@@ -136,14 +140,12 @@ public class FrameRobocup extends JFrame {
         JButton b20 = new JButton("Lancer");
         p2.add(b20);
         b20.addActionListener(c);
-        JButton b21 = new JButton("Suspendre / Reprendre");
-        p2.add(b21);
-        b21.addActionListener(c);
         JButton b22 = new JButton("Arrêter");
         p2.add(b22);
-        
         b22.addActionListener(c);
-
+        JLabel algo = new JLabel(" Algorithme : ",SwingConstants.CENTER);
+        p2.add(algo);
+        p2.add(new JComboBox(listAglo));
         getContentPane().add(p2,"South");
         
         pack();

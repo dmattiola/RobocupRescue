@@ -2,8 +2,10 @@ package controller;
 
 import java.awt.event.*;
 import java.util.logging.*;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import model.graph.Edge;
 import model.graph.Node;
 import model.graph.TypeEdge;
@@ -33,6 +35,12 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
     // Constructors
     public Controller(){ }
     
+    public void changeButtons(boolean b){
+        ((JButton)((JPanel)fr.getContentPane().getComponent(2)).getComponent(0)).setEnabled(b);
+        ((JButton)((JPanel)fr.getContentPane().getComponent(2)).getComponent(1)).setEnabled(!b);
+        ((JComboBox)((JPanel)fr.getContentPane().getComponent(2)).getComponent(3)).setEnabled(b);
+    }
+    
     // Methods
     @Override
     public void actionPerformed(ActionEvent ae){
@@ -41,22 +49,11 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
             case "Lancer":
                 this.th = new Thread(this.getManager());
                 this.th.start();
-                break;
-            case "Suspendre / Reprendre":
-                if (this.manager.isWait()){
-                    this.th.notify();
-                } else {
-                    try {
-                        this.th.wait();
-                        this.manager.setWait(true);
-                    } catch (InterruptedException ex) {
-                        System.out.println("Error wait thread");
-                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                changeButtons(false);
                 break;
             case "Arrêter":
                 this.th.stop();
+                changeButtons(true);
                 break;
             case "Sauvegarder":
                 this.manager.getGr().createFile();
@@ -192,7 +189,7 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
         if (type instanceof TypeEdge){
             this.fr.setTypeedge(TypeEdge.valueOf(type.toString()));
         } else if (type instanceof TypeRobot){
-        this.fr.setTyperobot(TypeRobot.valueOf(type.toString()));
+            this.fr.setTyperobot(TypeRobot.valueOf(type.toString()));
         }
     }
 
