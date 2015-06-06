@@ -1,14 +1,8 @@
 package model.robot;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import model.graph.Edge;
 import model.graph.Node;
 import model.graph.TypeEdge;
-import view.PanelMap;
 
 /**
  *
@@ -17,13 +11,13 @@ import view.PanelMap;
 public class RobotCaterpillar extends Robot {
 
     private String image = "src\\resources\\RobotCaterpillar.gif";
-    private int capacity;
+    private static int capacity = 40;
     private int position;
     private int speed;
     
     public RobotCaterpillar(Node n){
         super(n);
-        this.capacity = 40;
+        super.setCapacity(capacity);
         this.speed = 100;
     }
     
@@ -35,11 +29,6 @@ public class RobotCaterpillar extends Robot {
     @Override
     public String getImage() {
         return this.image;
-    }
-
-    @Override
-    public int getCapacity() {
-        return this.capacity;
     }
 
     @Override

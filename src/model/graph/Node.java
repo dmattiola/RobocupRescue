@@ -39,12 +39,12 @@ public class Node extends Observable {
     
     // Methods
     public void kindleFire(){
-        this.fire = 50;
+        this.setFire(50);
         this.type = TypeNode.INCENDIE;
     }
     
     public void extinguishFire(){
-        this.fire = 0;
+        this.setFire(0);
         this.type = TypeNode.NORMAL;
     }
     
@@ -75,5 +75,9 @@ public class Node extends Observable {
     
     public static void setNb_node(int aNb_node) {
         nb_node = aNb_node;
+    }
+
+    public void setFire(int fire) {
+        this.fire = fire;
     }
 }

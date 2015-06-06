@@ -21,7 +21,7 @@ public class FrameRobocup extends JFrame {
     // Attributes
     public static final Dimension VGAP = new Dimension(1,5);
     public static final Dimension HGAP = new Dimension(5,1);
-    public static final String[] listAglo = {" Dijkstra ", " A * ", " Largeur " };
+    public static final String[] listAglo = {"Dijkstra", "A *", "Largeur" };
     private PanelMap map;
     private Controller c;
     private TypeEdge typeedge = TypeEdge.PLAT;
@@ -62,6 +62,10 @@ public class FrameRobocup extends JFrame {
         ((JButton)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(1)).setToolTipText(name);
     }
     
+    public int getIntensityFire(){
+        return Integer.parseInt(((JTextField)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(13)).getText().toString());
+    }
+    
     private void initFrame(Graph g){
         getContentPane().setLayout(new BorderLayout(10,10));
 
@@ -98,6 +102,9 @@ public class FrameRobocup extends JFrame {
         typeEdgeList.addItemListener(c);
         toolBar.add(Box.createRigidArea(HGAP));
         addButton(toolBar, "Incendie", "Ajouter Incendie", null);
+        toolBar.add(Box.createRigidArea(HGAP));
+        JTextField fireIntensity = new JTextField("50");
+        toolBar.add(fireIntensity);
         toolBar.add(Box.createRigidArea(HGAP));
         addButton(toolBar, "Robot", "Ajouter Robot", null);
         toolBar.add(Box.createRigidArea(HGAP));
@@ -145,7 +152,9 @@ public class FrameRobocup extends JFrame {
         b22.addActionListener(c);
         JLabel algo = new JLabel(" Algorithme : ",SwingConstants.CENTER);
         p2.add(algo);
-        p2.add(new JComboBox(listAglo));
+        JComboBox listAlgorithme = new JComboBox(listAglo);
+        p2.add(listAlgorithme);
+        listAlgorithme.addItemListener(c);
         getContentPane().add(p2,"South");
         
         pack();
@@ -191,6 +200,10 @@ public class FrameRobocup extends JFrame {
        }
     }
 
+    public String getAlgorithme(){
+        return ((JComboBox)((JPanel)this.getContentPane().getComponent(2)).getComponent(2)).getSelectedItem().toString();
+    }
+    
     public TypeEdge getTypeedge() {
         return typeedge;
     }

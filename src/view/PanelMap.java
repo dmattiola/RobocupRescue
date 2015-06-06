@@ -69,11 +69,18 @@ public class PanelMap extends JPanel implements Observer {
     
     private void drawNode(Node n, Graphics g){
         g.setColor(Color.BLACK);
-        if (n.getType() != TypeNode.INCENDIE){
+        if (n.getType() == TypeNode.NORMAL){
             g.drawOval((int)n.getX()-5, (int)n.getY()-5, 12, 12);
-        } else {
+        } else if (n.getType() == TypeNode.INCENDIE){
             try {
                 Image im = ImageIO.read(new File("src\\resources\\fire.gif"));
+                g.drawImage(im, (int)n.getX()-6, (int)n.getY()-12, this);
+            } catch (IOException e) {
+                System.out.println("Painting Image Error : " + e.getMessage());
+            }
+        } else if (n.getType() == TypeNode.RECHARGE){
+            try {
+                Image im = ImageIO.read(new File("src\\resources\\recharge.gif"));
                 g.drawImage(im, (int)n.getX()-6, (int)n.getY()-12, this);
             } catch (IOException e) {
                 System.out.println("Painting Image Error : " + e.getMessage());

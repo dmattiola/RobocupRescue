@@ -64,17 +64,16 @@ public class MapManager extends Observable implements Runnable {
         }
         this.setListFires(fires);
     }
-    
-    
-    private ArrayList<Robot> getListBusyRobot(){
-        ArrayList<Robot> listBusy = new ArrayList<>();
+
+     private ArrayList<Robot> getListRobot(StateRobot etat){
+        ArrayList<Robot> listMoving = new ArrayList<>();
         for (Robot r : this.getListRobots()){
-            if (r.getState() == StateRobot.BUSY){
-                listBusy.add(r);
+            if (r.getState() == etat){
+                listMoving.add(r);
             }
         }
-        return listBusy;
-    }
+        return listMoving;
+     }
     private void updateBusyRobots(){
         for(Robot r : this.getListRobots()){
             for(Node n : this.getListFires()){
@@ -93,9 +92,9 @@ public class MapManager extends Observable implements Runnable {
             // MISE A JOUR DES FEUX
             updateFires();            
             // RECUPERE LES ROBOTS OCCUPES
-            listBusy = getListBusyRobot();
+            listBusy = getListRobot(StateRobot.BUSY);
             // ON FAIT BOUGER LES ROBOTS MOVING
-            listMoving = getListMovingRobot();
+            listMoving = getListRobot(StateRobot.MOVING);
             for(Robot r : listMoving){
                 r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
             }
@@ -189,14 +188,10 @@ public class MapManager extends Observable implements Runnable {
         this.m = m;
     }
 
-    private ArrayList<Robot> getListMovingRobot() {
-        ArrayList<Robot> listMoving = new ArrayList<>();
-        for (Robot r : this.getListRobots()){
-            if (r.getState() == StateRobot.MOVING){
-                listMoving.add(r);
-            }
-        }
-        return listMoving;
+    public void setA(Algorithme a) {
+        this.a = a;
     }
+
+   
     
 }

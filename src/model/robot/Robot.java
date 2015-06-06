@@ -1,6 +1,5 @@
 package model.robot;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Observable;
 import model.graph.Edge;
@@ -16,6 +15,7 @@ public abstract class Robot extends Observable {
     private Node n;
     private StateRobot state;
     private LinkedList<Node> listNodes;
+    private int capacity;
     
     // CONSTRUCTORS
 
@@ -26,6 +26,7 @@ public abstract class Robot extends Observable {
     public Robot(Node n){
         this.n = n;
         this.state = StateRobot.FREE;
+        this.capacity = 0;
     }
     
     // METHODS
@@ -55,9 +56,15 @@ public abstract class Robot extends Observable {
      * Extinguish the fire in th node where the robot is
     */
     public void extinguishFire(){
-        this.getN().extinguishFire();
-        this.state = StateRobot.FREE;
-        this.listNodes = null;
+        int valueFire = this.getN().getFire() - this.capacity;
+        if (valueFire <= 0){
+            this.getN().extinguishFire();
+            this.state = StateRobot.FREE;
+            this.listNodes = null;
+        } else {
+            this.getN().setFire(valueFire);
+        }
+        
         this.setChanged();
         this.notifyObservers();
     }
@@ -69,7 +76,6 @@ public abstract class Robot extends Observable {
     */
     public abstract boolean possibleTrip(Edge e);
     public abstract String getImage();
-    public abstract int getCapacity();
     public abstract int getPosition();
     public abstract void setPosition(int position);
     public abstract int getSpeed();
@@ -122,6 +128,14 @@ public abstract class Robot extends Observable {
      */
     public void setListNodes(LinkedList<Node> listNodes) {
         this.listNodes = listNodes;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getCapacity() {
+        return capacity;
     }
 
 }

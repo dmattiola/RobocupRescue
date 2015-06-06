@@ -1,13 +1,7 @@
 package model.robot;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import model.graph.Edge;
 import model.graph.Node;
-import view.PanelMap;
 
 /**
  *
@@ -16,13 +10,13 @@ import view.PanelMap;
 public class RobotCrossCountry extends Robot {
 
     private String image = "src\\resources\\RobotCrossCountry.gif";
-    private int capacity;
+    private static int capacity = 20;
     private int position;
     private int speed;
     
     public RobotCrossCountry(Node n){
         super(n);
-        this.capacity = 20;
+        super.setCapacity(capacity);
         this.speed = 75;
     }
 
@@ -34,11 +28,6 @@ public class RobotCrossCountry extends Robot {
     @Override
     public String getImage() {
         return this.image;
-    }
-
-    @Override
-    public int getCapacity() {
-        return this.capacity;
     }
 
     @Override

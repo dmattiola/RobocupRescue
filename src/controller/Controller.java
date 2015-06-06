@@ -6,6 +6,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.algorithme.AStar;
+import model.algorithme.AlgorithmeParcoursProfondeur;
+import model.algorithme.Dijkstra;
 import model.graph.Edge;
 import model.graph.Node;
 import model.graph.TypeEdge;
@@ -126,7 +129,9 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
         if (this.action.equals("Incendie")){
             Node n = findNode(x_, y_);
             if (n == null){
-                pm.addNode(new Node(x_,y_,TypeNode.INCENDIE));
+                Node node = new Node(x_,y_,TypeNode.INCENDIE);
+                node.setFire(this.fr.getIntensityFire());
+                pm.addNode(node);
             } else {
                 n.kindleFire();
                 this.pm.repaint();
@@ -190,6 +195,18 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
             this.fr.setTypeedge(TypeEdge.valueOf(type.toString()));
         } else if (type instanceof TypeRobot){
             this.fr.setTyperobot(TypeRobot.valueOf(type.toString()));
+        } else {
+            switch(this.fr.getAlgorithme()){
+                case "Dijkstra":
+                    this.manager.setA(new Dijkstra());
+                    break;
+                case "A *":
+                    this.manager.setA(new AStar());
+                    break;
+                case "Largeur":
+                    this.manager.setA(new AlgorithmeParcoursProfondeur());
+                    break;
+            }
         }
     }
 
