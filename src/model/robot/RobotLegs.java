@@ -21,6 +21,13 @@ public class RobotLegs extends Robot {
         this.speed = 50;
     }
     
+    public static int getCapacity_() {
+        return capacity;
+    }
+
+    public static void setCapacity_(int aCapacity) {
+        capacity = aCapacity;
+    }
     @Override
     public boolean possibleTrip(Edge e) {
         return (e.getType() != TypeEdge.INONDE);

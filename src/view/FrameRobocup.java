@@ -106,6 +106,8 @@ public class FrameRobocup extends JFrame {
         JTextField fireIntensity = new JTextField("50");
         toolBar.add(fireIntensity);
         toolBar.add(Box.createRigidArea(HGAP));
+        addButton(toolBar, "Recharge", "Ajouter Station de Rechargement", null);
+        toolBar.add(Box.createRigidArea(HGAP));
         addButton(toolBar, "Robot", "Ajouter Robot", null);
         toolBar.add(Box.createRigidArea(HGAP));
         JComboBox typeRobotList = new JComboBox(TypeRobot.values());

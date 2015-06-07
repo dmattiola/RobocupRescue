@@ -9,6 +9,9 @@ import model.graph.Node;
 import model.graph.TypeEdge;
 import model.graph.TypeNode;
 import model.robot.Robot;
+import model.robot.RobotCaterpillar;
+import model.robot.RobotCrossCountry;
+import model.robot.RobotLegs;
 import model.robot.StateRobot;
 import view.PanelMap;
 
@@ -65,7 +68,7 @@ public class MapManager extends Observable implements Runnable {
         this.setListFires(fires);
     }
 
-     private ArrayList<Robot> getListRobot(StateRobot etat){
+    private ArrayList<Robot> getListRobot(StateRobot etat){
         ArrayList<Robot> listMoving = new ArrayList<>();
         for (Robot r : this.getListRobots()){
             if (r.getState() == etat){
@@ -83,20 +86,69 @@ public class MapManager extends Observable implements Runnable {
             }   
         }
     }
-    
+    private ArrayList<Node> updateRechargingPlaces(){
+        ArrayList<Node> list = new ArrayList<>();
+        for (Node n : this.gr.getListNodes()){
+            if (n.getType() == TypeNode.RECHARGE){
+                list.add(n);
+            }
+        }
+        return list;
+    }
+    private void closestRecharging(Robot r, ArrayList<Node> listRechargingPlace){
+        int pathValue = Integer.MAX_VALUE;
+        Map<Node,Integer> map = null;
+        for (Node n : listRechargingPlace){
+            LinkedList<Node> listNode = (this.a.shortestTrip(this.gr, n, r));
+            map = this.a.getDistance();
+            if (map.get(n) != null){
+                if (pathValue > map.get(n)){
+                    pathValue = map.get(n);
+                    r.setListNodes(listNode);
+                }
+            }
+        }
+        
+    }
+    private void fillCapacity(Robot r){
+        if (r instanceof RobotCaterpillar){
+            r.setCapacity(RobotCaterpillar.getCapacity_());
+        }
+        if (r instanceof RobotCrossCountry){
+            r.setCapacity(RobotCrossCountry.getCapacity_());
+        }
+        if (r instanceof RobotLegs){
+            r.setCapacity(RobotLegs.getCapacity_());
+        }
+        r.setState(StateRobot.FREE);
+    }
     @Override
     public void run() {
         this.isRunning = true;
-        ArrayList<Robot> listBusy,listMoving = new ArrayList<>();
+        ArrayList<Robot> listBusy, listMoving, listRecharging = new ArrayList<>();
+        ArrayList<Node> listRechargingPlace = new ArrayList<>();
         while(this.isRunning){
             // MISE A JOUR DES FEUX
-            updateFires();            
+            updateFires(); 
+            listRechargingPlace = updateRechargingPlaces();
             // RECUPERE LES ROBOTS OCCUPES
             listBusy = getListRobot(StateRobot.BUSY);
             // ON FAIT BOUGER LES ROBOTS MOVING
             listMoving = getListRobot(StateRobot.MOVING);
+            listRecharging = getListRobot(StateRobot.ONRECHARGE);
+            
             for(Robot r : listMoving){
                 r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
+            }
+            for(Robot r : listRecharging){
+                if (r.getListNodes() == null){
+                    closestRecharging(r,listRechargingPlace);
+                }
+                if (r.getListNodes().size() == 0){
+                    fillCapacity(r);
+                } else {
+                    r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
+                }
             }
             // ON PARCOURS LA LISTE DES FEUX QUI NE SONT PAS OCCUPES
             for (Node n : this.listFires){
@@ -106,6 +158,7 @@ public class MapManager extends Observable implements Runnable {
                     // SI ON LE TROUVE IL AVANCE
                     if (r != null){
                         n.setFilled(true);
+                        r.setState(StateRobot.MOVING);
                         r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
                     }
                 }
@@ -118,6 +171,7 @@ public class MapManager extends Observable implements Runnable {
                 r.extinguishFire();
                 updateEdges(r);
             }
+            
             this.setChanged();
             this.notifyObservers();
             this.m.repaint();

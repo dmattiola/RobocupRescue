@@ -13,7 +13,13 @@ public class RobotCrossCountry extends Robot {
     private static int capacity = 20;
     private int position;
     private int speed;
-    
+        public static int getCapacity_() {
+        return capacity;
+    }
+
+    public static void setCapacity_(int aCapacity) {
+        capacity = aCapacity;
+    }
     public RobotCrossCountry(Node n){
         super(n);
         super.setCapacity(capacity);

@@ -46,7 +46,6 @@ public abstract class Robot extends Observable {
             } else {
                 this.setPosition(this.getPosition()+this.getSpeed());
             }
-            this.state = StateRobot.MOVING;
         }
         this.setChanged();
         this.notifyObservers();
@@ -62,6 +61,13 @@ public abstract class Robot extends Observable {
             this.state = StateRobot.FREE;
             this.listNodes = null;
         } else {
+            if (this.capacity - this.getN().getFire() <= 0){
+                this.capacity = 0;
+                this.setState(StateRobot.ONRECHARGE);
+                this.listNodes = null;
+            } else {
+                this.capacity = this.capacity - this.getN().getFire();
+            }
             this.getN().setFire(valueFire);
         }
         

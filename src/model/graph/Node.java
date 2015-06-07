@@ -40,12 +40,12 @@ public class Node extends Observable {
     // Methods
     public void kindleFire(){
         this.setFire(50);
-        this.type = TypeNode.INCENDIE;
+        this.setType(TypeNode.INCENDIE);
     }
     
     public void extinguishFire(){
         this.setFire(0);
-        this.type = TypeNode.NORMAL;
+        this.setType(TypeNode.NORMAL);
     }
     
     // Getters & Setters
@@ -79,5 +79,9 @@ public class Node extends Observable {
 
     public void setFire(int fire) {
         this.fire = fire;
+    }
+
+    public void setType(TypeNode type) {
+        this.type = type;
     }
 }

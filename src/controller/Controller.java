@@ -77,6 +77,9 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
             case "Arc":
                 this.action = action;
                 break;
+            case "Recharge":
+                this.action = action;
+                break;
             case "Afficher":
                 this.fr.changeHide("Cacher");
                 this.manager.getGr().setShown(true);
@@ -134,6 +137,17 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
                 pm.addNode(node);
             } else {
                 n.kindleFire();
+                this.pm.repaint();
+            }
+        }
+        if (this.action.equals("Recharge")){
+            Node n = findNode(x_, y_);
+            if (n == null){
+                Node node = new Node(x_,y_,TypeNode.RECHARGE);
+                node.setFire(this.fr.getIntensityFire());
+                pm.addNode(node);
+            } else {
+                n.setType(TypeNode.RECHARGE);
                 this.pm.repaint();
             }
         }

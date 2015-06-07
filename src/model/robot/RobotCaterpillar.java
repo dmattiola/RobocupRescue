@@ -10,6 +10,14 @@ import model.graph.TypeEdge;
  */
 public class RobotCaterpillar extends Robot {
 
+    public static int getCapacity_() {
+        return capacity;
+    }
+
+    public static void setCapacity_(int aCapacity) {
+        capacity = aCapacity;
+    }
+
     private String image = "src\\resources\\RobotCaterpillar.gif";
     private static int capacity = 40;
     private int position;
