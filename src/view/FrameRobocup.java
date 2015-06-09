@@ -203,7 +203,7 @@ public class FrameRobocup extends JFrame {
     }
 
     public String getAlgorithme(){
-        return ((JComboBox)((JPanel)this.getContentPane().getComponent(2)).getComponent(2)).getSelectedItem().toString();
+        return ((JComboBox)((JPanel)this.getContentPane().getComponent(2)).getComponent(3)).getSelectedItem().toString();
     }
     
     public TypeEdge getTypeedge() {

@@ -28,7 +28,7 @@ public class MapManager extends Observable implements Runnable {
     private boolean isRunning;
     private boolean wait;
     private PanelMap m;
-    private static double probaIndondation = 0.25;
+    private static final double probaIndondation = 0.25;
     
     public MapManager(Algorithme a, Graph g){
         this.gr = g;
@@ -192,7 +192,7 @@ public class MapManager extends Observable implements Runnable {
         }
         Random rand = new Random();
         for (Edge e : listEdge){
-            if (rand.nextInt(100)/100 < probaIndondation){
+            if (rand.nextInt(100) < probaIndondation*100){
                 e.setType(TypeEdge.INONDE);
             }
         }
