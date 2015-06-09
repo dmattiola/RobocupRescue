@@ -21,7 +21,7 @@ public class FrameRobocup extends JFrame {
     // Attributes
     public static final Dimension VGAP = new Dimension(1,5);
     public static final Dimension HGAP = new Dimension(5,1);
-    public static final String[] listAglo = {"Dijkstra", "A *", "Largeur" };
+    public static final String[] listAglo = {"Dijkstra", "Largeur" };
     private PanelMap map;
     private Controller c;
     private TypeEdge typeedge = TypeEdge.PLAT;

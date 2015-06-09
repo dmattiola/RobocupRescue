@@ -7,8 +7,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import model.algorithme.AStar;
-import model.algorithme.AlgorithmeParcoursProfondeur;
+import model.algorithme.BreadthFirstSearch;
 import model.algorithme.Dijkstra;
 import model.graph.Edge;
 import model.graph.Node;
@@ -215,11 +214,8 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
                 case "Dijkstra":
                     this.manager.setA(new Dijkstra());
                     break;
-                case "A *":
-                    this.manager.setA(new AStar());
-                    break;
                 case "Largeur":
-                    this.manager.setA(new AlgorithmeParcoursProfondeur());
+                    this.manager.setA(new BreadthFirstSearch());
                     break;
             }
         }
