@@ -38,8 +38,8 @@ public class Node extends Observable {
     }
     
     // Methods
-    public void kindleFire(){
-        this.setFire(50);
+    public void kindleFire(int intensity){
+        this.setFire(intensity);
         this.setType(TypeNode.INCENDIE);
     }
     

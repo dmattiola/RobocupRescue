@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.util.logging.*;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import model.algorithme.AStar;
@@ -136,7 +137,7 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
                 node.setFire(this.fr.getIntensityFire());
                 pm.addNode(node);
             } else {
-                n.kindleFire();
+                n.kindleFire(this.fr.getIntensityFire());
                 this.pm.repaint();
             }
         }

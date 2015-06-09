@@ -3,6 +3,8 @@ package model.graph;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Observable;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -24,14 +26,26 @@ public class Graph extends Observable {
     
     // Methods
     public void createFile(){
-        File f = new File("graphmap.xml");
+        JFileChooser chooser = new JFileChooser();
+        chooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Only xml files", "xml");
+        chooser.addChoosableFileFilter(filter);
+        chooser.showSaveDialog(null);
+        File f = chooser.getSelectedFile();
+        if (!f.getName().endsWith(".xml")){
+            f = new File(f.getAbsolutePath().concat(".xml"));
+        }
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(f));
             PrintWriter pw = new PrintWriter(bw);
             pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             pw.println("<osm>");
             for (Node node : this.getListNodes()) {
-                pw.println(" <node id=\""+node.getId()+"\" x=\""+node.getX()+"\" y=\""+node.getY()+"\" type=\""+node.getType()+"\" />");
+                if(node.getType() == TypeNode.INCENDIE){
+                    pw.println(" <node id=\""+node.getId()+"\" x=\""+node.getX()+"\" y=\""+node.getY()+"\" type=\""+node.getType()+"\" intensity=\""+node.getFire()+"\" />");
+                } else {
+                   pw.println(" <node id=\""+node.getId()+"\" x=\""+node.getX()+"\" y=\""+node.getY()+"\" type=\""+node.getType()+"\" />");
+                }
             }
             for (Edge edge : this.getListEdges()) {
                 pw.println(" <edge nd1=\""+edge.getNode1().getId()+"\" nd2=\""+edge.getNode2().getId()+"\" type=\""+edge.getType()+"\" />");
@@ -44,11 +58,19 @@ public class Graph extends Observable {
     }
     
     public Graph loadFile(){
+        String path = "";
+        JFileChooser choix = new JFileChooser();
+        choix.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Only xml files", "xml");
+        choix.addChoosableFileFilter(filter);
+        if (choix.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+            path = choix.getSelectedFile().getAbsolutePath();
+        }
         Graph g = new Graph();
         boolean quit = false;
         int max = 0;
         try{
-            BufferedReader br = new BufferedReader(new FileReader("graphmap.xml"));
+            BufferedReader br = new BufferedReader(new FileReader(path));
             do {
                 String line = br.readLine();
                 if (line.indexOf("<node") != -1){
@@ -56,7 +78,7 @@ public class Graph extends Observable {
                     Node node = new Node(Integer.parseInt(node_xml[1]),(int)Double.parseDouble(node_xml[3]),(int)Double.parseDouble(node_xml[5]),TypeNode.valueOf(node_xml[7]));
                     max = Math.max(max, node.getId());
                     if (node.getType() == TypeNode.INCENDIE){
-                        node.kindleFire();
+                        node.kindleFire((int)Double.parseDouble(node_xml[9]));
                     }
                     g.getListNodes().add(node);
                 }
