@@ -23,7 +23,7 @@ public class FrameRobocup extends JFrame {
     public static final Dimension HGAP = new Dimension(5,1);
     public static final String[] listAglo = {"Dijkstra", "Largeur" };
     private PanelMap map;
-    private Controller c;
+    private final Controller c;
     private TypeEdge typeedge = TypeEdge.PLAT;
     private TypeRobot typerobot = TypeRobot.TOUT_TERRAIN;
     

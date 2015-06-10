@@ -9,10 +9,10 @@ import java.util.Observable;
 public class Edge extends Observable {
     
     // Attributes
-    private Node node1;
-    private Node node2;
+    private final Node node1;
+    private final Node node2;
     private TypeEdge type;
-    private double length;
+    private final double length;
     
     // Constructors
     public Edge(Node node1, Node node2, TypeEdge type){

@@ -1,10 +1,8 @@
 package controller;
 
 import java.awt.event.*;
-import java.util.logging.*;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import model.algorithme.BreadthFirstSearch;
@@ -47,8 +45,8 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
     // Methods
     @Override
     public void actionPerformed(ActionEvent ae){
-        String action = ae.getActionCommand();
-        switch(action){
+        String actions = ae.getActionCommand();
+        switch(actions){
             case "Lancer":
                 this.th = new Thread(this.getManager());
                 this.th.start();
@@ -66,19 +64,19 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
                 this.pm.repaint();
                 break;
             case "Incendie":
-                this.action = action;
+                this.action = actions;
                 break;
             case "Robot":
-                this.action = action;
+                this.action = actions;
                 break;
             case "Noeud":
-                this.action = action;
+                this.action = actions;
                 break;
             case "Arc":
-                this.action = action;
+                this.action = actions;
                 break;
             case "Recharge":
-                this.action = action;
+                this.action = actions;
                 break;
             case "Afficher":
                 this.fr.changeHide("Cacher");

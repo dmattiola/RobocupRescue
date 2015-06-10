@@ -37,21 +37,21 @@ public class Graph extends Observable {
         }
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-            PrintWriter pw = new PrintWriter(bw);
-            pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            pw.println("<osm>");
-            for (Node node : this.getListNodes()) {
-                if(node.getType() == TypeNode.INCENDIE){
-                    pw.println(" <node id=\""+node.getId()+"\" x=\""+node.getX()+"\" y=\""+node.getY()+"\" type=\""+node.getType()+"\" intensity=\""+node.getFire()+"\" />");
-                } else {
-                   pw.println(" <node id=\""+node.getId()+"\" x=\""+node.getX()+"\" y=\""+node.getY()+"\" type=\""+node.getType()+"\" />");
+            try (PrintWriter pw = new PrintWriter(bw)) {
+                pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                pw.println("<osm>");
+                for (Node node : this.getListNodes()) {
+                    if(node.getType() == TypeNode.INCENDIE){
+                        pw.println(" <node id=\""+node.getId()+"\" x=\""+node.getX()+"\" y=\""+node.getY()+"\" type=\""+node.getType()+"\" intensity=\""+node.getFire()+"\" />");
+                    } else {
+                        pw.println(" <node id=\""+node.getId()+"\" x=\""+node.getX()+"\" y=\""+node.getY()+"\" type=\""+node.getType()+"\" />");
+                    }
                 }
+                for (Edge edge : this.getListEdges()) {
+                    pw.println(" <edge nd1=\""+edge.getNode1().getId()+"\" nd2=\""+edge.getNode2().getId()+"\" type=\""+edge.getType()+"\" />");
+                }
+                pw.println("</osm>");
             }
-            for (Edge edge : this.getListEdges()) {
-                pw.println(" <edge nd1=\""+edge.getNode1().getId()+"\" nd2=\""+edge.getNode2().getId()+"\" type=\""+edge.getType()+"\" />");
-            }
-            pw.println("</osm>");
-            pw.close();
         } catch (IOException e) {
             System.out.println("Writing Error : " + e.getMessage());
         }

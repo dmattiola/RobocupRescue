@@ -9,10 +9,10 @@ import model.graph.Node;
  */
 public class RobotCrossCountry extends Robot {
 
-    private String image = "src\\resources\\RobotCrossCountry.gif";
+    private final String image = "src\\resources\\RobotCrossCountry.gif";
     private static int capacity = 20;
     private int position;
-    private int speed;
+    private final int speed;
         public static int getCapacity_() {
         return capacity;
     }

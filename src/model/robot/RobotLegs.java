@@ -10,10 +10,10 @@ import model.graph.TypeEdge;
  */
 public class RobotLegs extends Robot {
 
-    private String image = "src\\resources\\RobotLegs.gif";
+    private final String image = "src\\resources\\RobotLegs.gif";
     private static int capacity = 30;
     private int position;
-    private int speed;
+    private final int speed;
     
     public RobotLegs(Node n){
         super(n);

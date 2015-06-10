@@ -9,9 +9,9 @@ import java.util.Observable;
 public class Node extends Observable {
 
     // Attributes
-    private int id;
-    private double x;
-    private double y;
+    private final int id;
+    private final double x;
+    private final double y;
     private TypeNode type;
     private int fire;
     private boolean filled;

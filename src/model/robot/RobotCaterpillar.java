@@ -18,10 +18,10 @@ public class RobotCaterpillar extends Robot {
         capacity = aCapacity;
     }
 
-    private String image = "src\\resources\\RobotCaterpillar.gif";
+    private final String image = "src\\resources\\RobotCaterpillar.gif";
     private static int capacity = 40;
     private int position;
-    private int speed;
+    private final int speed;
     
     public RobotCaterpillar(Node n){
         super(n);
