@@ -1,31 +1,21 @@
 package controller;
 
 import java.awt.event.*;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import model.algorithme.BreadthFirstSearch;
 import model.algorithme.Dijkstra;
-import model.graph.Edge;
-import model.graph.Node;
-import model.graph.TypeEdge;
-import model.graph.TypeNode;
+import model.graph.*;
 import model.mapmanager.MapManager;
-import model.robot.RobotCaterpillar;
-import model.robot.RobotCrossCountry;
-import model.robot.RobotLegs;
-import model.robot.TypeRobot;
-import view.FrameRobocup;
-import view.PanelMap;
+import model.robot.*;
+import view.*;
 
 /**
- *
- * @author Dylan
- */
+ * Controller of the RobotCup Rescue
+ * @author Dylan & Anthony
+*/
 public class Controller implements ActionListener, MouseListener, ItemListener {
 
-    // Attributes
+    // ATTRIBUTES
     private FrameRobocup fr;
     private PanelMap pm;
     private Thread th;
@@ -33,16 +23,19 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
     private String action = "";
     private Node selectedNode = null;
     
-    // Constructors
+    // CONSTRUCTORS
+
+    /**
+     * Constructor of a Controller
+    */
     public Controller(){ }
     
-    public void changeButtons(boolean b){
-        ((JButton)((JPanel)fr.getContentPane().getComponent(2)).getComponent(0)).setEnabled(b);
-        ((JButton)((JPanel)fr.getContentPane().getComponent(2)).getComponent(1)).setEnabled(!b);
-        ((JComboBox)((JPanel)fr.getContentPane().getComponent(2)).getComponent(3)).setEnabled(b);
-    }
-    
-    // Methods
+    // ACTIONLISTENER METHODS
+
+    /**
+     * When a click happens on a button
+     * @param ae
+    */
     @Override
     public void actionPerformed(ActionEvent ae){
         String actions = ae.getActionCommand();
@@ -89,92 +82,93 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
                 this.pm.repaint();
                 break;
             case "Effacer":
-                this.fr.effacer();
+                this.fr.delete();
                 break;
             case "Quitter":
-                this.fr.quitter();
+                this.fr.quit();
                 break;
             default:
                 break;
         }
     }
 
+    // MOUSELISTENER METHODS
+    
+    /**
+     * When a click happens on the map
+     * @param me MouseEvent
+    */
     @Override
     public void mouseClicked(MouseEvent me){
         int x_ = me.getX();
         int y_ = me.getY();
-        System.out.println("Clic en : "+x_+" // "+y_);
-        if (this.action.equals("Noeud")){
-            if (findNode(x_, y_) == null){
-                pm.addNode(new Node(x_,y_,TypeNode.NORMAL));
-                this.action = "";
-            } else {
-                JOptionPane.showMessageDialog(pm, "Noeud déjà existant.");
-            }
-        }
-        if (this.action.equals("Arc")){
-            Node node1 = findNode(x_, y_); 
-            if (node1 == null){
-                JOptionPane.showMessageDialog(pm, "Vous n'avez pas cliqué sur un noeud.");
-            } else {
-                if (selectedNode != null && !node1.equals(selectedNode)){     
-                    pm.addEdge(new Edge(node1,selectedNode,this.fr.getTypeedge()));
+        Node n = null;
+        switch(this.action){
+            case "Noeud":
+                if (findNode(x_, y_) == null){
+                    pm.addNode(new Node(x_,y_,TypeNode.NORMAL));
                     this.action = "";
-                    this.selectedNode = null;
+                } else {
+                    JOptionPane.showMessageDialog(pm, "Noeud déjà existant.");
+                }
+                break;
+            case "Arc":
+                n = findNode(x_, y_); 
+                if (n == null){
+                    JOptionPane.showMessageDialog(pm, "Vous n'avez pas cliqué sur un noeud.");
+                } else {
+                    if (selectedNode != null && !n.equals(selectedNode)){     
+                        pm.addEdge(new Edge(n,selectedNode,this.fr.getTypeedge()));
+                        this.action = "";
+                        this.selectedNode = null;
+                    }
+                    else {
+                        selectedNode = n;
+                    }
+                }
+                break;
+            case "Incendie":
+                n = findNode(x_, y_);
+                if (n == null){
+                    Node node = new Node(x_,y_,TypeNode.INCENDIE);
+                    node.setFire(this.fr.getIntensityFire());
+                    pm.addNode(node);
+                } else {
+                    n.kindleFire(this.fr.getIntensityFire());
+                    this.pm.repaint();
+                }
+                break;
+            case "Recharge":
+                n = findNode(x_, y_);
+                if (n == null){
+                    Node node = new Node(x_,y_,TypeNode.RECHARGE);
+                    node.setFire(this.fr.getIntensityFire());
+                    pm.addNode(node);
+                } else {
+                    n.setType(TypeNode.RECHARGE);
+                    this.pm.repaint();
+                }
+                break;
+            case "Robot":
+                n = findNode(x_,y_);
+                if (n == null){
+                    JOptionPane.showMessageDialog(pm, "Vous devez ajouter un robot sur un noeud.");
                 }
                 else {
-                    selectedNode = node1;
+                    if (this.fr.getTyperobot() == TypeRobot.TOUT_TERRAIN){
+                        this.pm.addRobot(new RobotCrossCountry(n));
+                    }
+                    if (this.fr.getTyperobot() == TypeRobot.A_PATTES){
+                        this.pm.addRobot(new RobotLegs(n));
+                    }
+                    if (this.fr.getTyperobot() == TypeRobot.A_CHENILLES){
+                        this.pm.addRobot(new RobotCaterpillar(n));
+                    }
                 }
-            }
+                break;
+            default:
+                break;
         }
-        if (this.action.equals("Incendie")){
-            Node n = findNode(x_, y_);
-            if (n == null){
-                Node node = new Node(x_,y_,TypeNode.INCENDIE);
-                node.setFire(this.fr.getIntensityFire());
-                pm.addNode(node);
-            } else {
-                n.kindleFire(this.fr.getIntensityFire());
-                this.pm.repaint();
-            }
-        }
-        if (this.action.equals("Recharge")){
-            Node n = findNode(x_, y_);
-            if (n == null){
-                Node node = new Node(x_,y_,TypeNode.RECHARGE);
-                node.setFire(this.fr.getIntensityFire());
-                pm.addNode(node);
-            } else {
-                n.setType(TypeNode.RECHARGE);
-                this.pm.repaint();
-            }
-        }
-        if (this.action.equals("Robot")){
-            Node n = findNode(x_,y_);
-            if (n == null){
-                JOptionPane.showMessageDialog(pm, "Vous devez ajouter un robot sur un noeud.");
-            }
-            else {
-                if (this.fr.getTyperobot() == TypeRobot.TOUT_TERRAIN){
-                    this.pm.addRobot(new RobotCrossCountry(n));
-                }
-                if (this.fr.getTyperobot() == TypeRobot.A_PATTES){
-                    this.pm.addRobot(new RobotLegs(n));
-                }
-                if (this.fr.getTyperobot() == TypeRobot.A_CHENILLES){
-                    this.pm.addRobot(new RobotCaterpillar(n));
-                }
-            }
-        }
-    }
-
-    private Node findNode(int x, int y){
-        for (Node n : this.manager.getGr().getListNodes()){
-            if (x > n.getX()-6 && x < n.getX()+6 && y < n.getY()+6 && y > n.getY()-6){
-                return n;
-            }
-        }
-        return null;
     }
     
     @Override
@@ -186,21 +180,14 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
     @Override
     public void mouseExited(MouseEvent me){ }
 
-    public FrameRobocup getFr(){
-        return fr;
-    }
-    public void setFr(FrameRobocup fr){
-        this.fr = fr;
-    }
-    public PanelMap getPm(){
-        return pm;
-    }
-    public void setPm(PanelMap pm){
-        this.pm = pm;
-    }
+    // ITEMLISTENER METHODS
 
+    /**
+     * When a combobox change its selected item
+     * @param ie ItemEvent
+    */
     @Override
-    public void itemStateChanged(ItemEvent ie) {
+    public void itemStateChanged(ItemEvent ie){
         JComboBox cb = (JComboBox)ie.getSource();
         Object type = cb.getSelectedItem();
         if (type instanceof TypeEdge){
@@ -218,13 +205,82 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
             }
         }
     }
-
-    public MapManager getManager() {
+    
+    // METHODS
+    
+    /**
+     * Change buttons Start / Stop
+     * @param b disable buttons
+    */
+    public void changeButtons(boolean b){
+        ((JButton)((JPanel)fr.getContentPane().getComponent(2)).getComponent(0)).setEnabled(b);
+        ((JButton)((JPanel)fr.getContentPane().getComponent(2)).getComponent(1)).setEnabled(!b);
+        ((JComboBox)((JPanel)fr.getContentPane().getComponent(2)).getComponent(3)).setEnabled(b);
+    }
+    
+    /**
+     * Find node with its position
+     * @param x Position on X
+     * @param y Position on Y
+     * @return (Node) Node at this Position
+    */
+    private Node findNode(int x, int y){
+        for (Node n : this.manager.getGr().getListNodes()){
+            if (x > n.getX()-6 && x < n.getX()+6 && y < n.getY()+6 && y > n.getY()-6){
+                return n;
+            }
+        }
+        return null;
+    }
+    
+    // GETTERS & SETTERS
+    
+    /**
+     * Get the manager : MapManager
+     * @return (MapManager) Manager
+    */
+    public MapManager getManager(){
         return manager;
     }
 
-    public void setManager(MapManager manager) {
+    /**
+     * Set the manager : MapManager
+     * @param manager Manager
+    */
+    public void setManager(MapManager manager){
         this.manager = manager;
+    }
+    
+    /**
+     * Get the frame : FrameRobocup
+     * @return (FrameRobocup) Frame
+    */
+    public FrameRobocup getFr(){
+        return fr;
+    }
+
+    /**
+     * Set the frame : FrameRobocup
+     * @param fr Frame
+    */
+    public void setFr(FrameRobocup fr){
+        this.fr = fr;
+    }
+
+    /**
+     * Get the panel : PanelMap
+     * @return (PanelMap) Panel
+    */
+    public PanelMap getPm(){
+        return pm;
+    }
+
+    /**
+     * Set the panel : PanelMap
+     * @param pm Panel
+    */
+    public void setPm(PanelMap pm){
+        this.pm = pm;
     }
     
 }

@@ -1,9 +1,9 @@
 package model.graph;
 
 /**
- *
- * @author Dylan
- */
+ * Enum of Node Type
+ * @author Dylan & Anthony
+*/
 public enum TypeNode {
     NORMAL, INCENDIE, RECHARGE;
 }

@@ -2,128 +2,47 @@ package model.mapmanager;
 
 import java.util.*;
 import java.util.logging.*;
-import model.algorithme.Algorithme;
-import model.graph.Edge;
-import model.graph.Graph;
-import model.graph.Node;
-import model.graph.TypeEdge;
-import model.graph.TypeNode;
-import model.robot.Robot;
-import model.robot.RobotCaterpillar;
-import model.robot.RobotCrossCountry;
-import model.robot.RobotLegs;
-import model.robot.StateRobot;
+import model.algorithme.Algorithm;
+import model.graph.*;
+import model.robot.*;
 import view.PanelMap;
 
 /**
- *
- * @author Dylan
- */
+ * Model MapManager
+ * @author Dylan & Anthony
+*/
 public class MapManager extends Observable implements Runnable {
 
+    // ATTRIBUTES
     private Graph gr;
-    private Algorithme a;
+    private Algorithm a;
     private ArrayList<Robot> listRobots;
     private ArrayList<Node> listFires;
     private boolean isRunning;
-    private boolean wait;
     private PanelMap m;
     private static final double probaIndondation = 0.25;
     
-    public MapManager(Algorithme a, Graph g){
+    // CONSTRUCTORS
+    
+    /**
+     * Constructor of a MapManger
+     * @param a Algorithm Selected
+     * @param g Current Graph
+    */
+    public MapManager(Algorithm a, Graph g){
         this.gr = g;
         this.a = a;
         this.listRobots = new ArrayList<>();
         this.listFires = new ArrayList<>();
-        this.wait = false;
     }
     
-    private Robot closestRobot(Node n){
-        int pathValue = Integer.MAX_VALUE;
-        Robot closest = null;
-        Map<Node,Integer> map = null;
-        for (Robot r : getListRobots()){
-            if (r.getState() == StateRobot.FREE){
-                LinkedList<Node> rr = (this.a.shortestTrip(this.gr, n, r));
-                map = this.a.getDistance();
-                if (map.get(n)!= null){
-                    if (pathValue > map.get(n)){
-                        pathValue = map.get(n);
-                        closest = r;
-                        r.setListNodes(rr);
-                    }
-                }
-            }
-        }
-        return closest;
-    }
-
-    public void updateFires(){
-        ArrayList<Node> fires = new ArrayList<>();
-        for (Node n : this.getGr().getListNodes()){
-            if (n.getType() == TypeNode.INCENDIE){
-                fires.add(n);
-            }
-        }
-        this.setListFires(fires);
-    }
-
-    private ArrayList<Robot> getListRobot(StateRobot etat){
-        ArrayList<Robot> listMoving = new ArrayList<>();
-        for (Robot r : this.getListRobots()){
-            if (r.getState() == etat){
-                listMoving.add(r);
-            }
-        }
-        return listMoving;
-     }
-    private void updateBusyRobots(){
-        for(Robot r : this.getListRobots()){
-            for(Node n : this.getListFires()){
-                if (r.getN().equals(n)){
-                    r.setState(StateRobot.BUSY);
-                }
-            }   
-        }
-    }
-    private ArrayList<Node> updateRechargingPlaces(){
-        ArrayList<Node> list = new ArrayList<>();
-        for (Node n : this.gr.getListNodes()){
-            if (n.getType() == TypeNode.RECHARGE){
-                list.add(n);
-            }
-        }
-        return list;
-    }
-    private void closestRecharging(Robot r, ArrayList<Node> listRechargingPlace){
-        int pathValue = Integer.MAX_VALUE;
-        Map<Node,Integer> map = null;
-        for (Node n : listRechargingPlace){
-            LinkedList<Node> listNode = (this.a.shortestTrip(this.gr, n, r));
-            map = this.a.getDistance();
-            if (map.get(n) != null){
-                if (pathValue > map.get(n)){
-                    pathValue = map.get(n);
-                    r.setListNodes(listNode);
-                }
-            }
-        }
-        
-    }
-    private void fillCapacity(Robot r){
-        if (r instanceof RobotCaterpillar){
-            r.setCapacity(RobotCaterpillar.getCapacity_());
-        }
-        if (r instanceof RobotCrossCountry){
-            r.setCapacity(RobotCrossCountry.getCapacity_());
-        }
-        if (r instanceof RobotLegs){
-            r.setCapacity(RobotLegs.getCapacity_());
-        }
-        r.setState(StateRobot.FREE);
-    }
+    // RUNNABLE METHOD
+    
+    /**
+     * When the Thread is launched
+    */
     @Override
-    public void run() {
+    public void run(){
         this.isRunning = true;
         ArrayList<Robot> listBusy, listMoving, listRecharging = new ArrayList<>();
         ArrayList<Node> listRechargingPlace = new ArrayList<>();
@@ -183,6 +102,129 @@ public class MapManager extends Observable implements Runnable {
         }
     }
     
+    // METHODS
+    
+    /**
+     * Get the closest robot of the node n
+     * @param n Node Concerned
+     * @return (Robot) Closest Robot
+    */
+    private Robot closestRobot(Node n){
+        int pathValue = Integer.MAX_VALUE;
+        Robot closest = null;
+        Map<Node,Integer> map = null;
+        for (Robot r : getListRobots()){
+            if (r.getState() == StateRobot.FREE){
+                LinkedList<Node> rr = (this.a.shortestTrip(this.gr, n, r));
+                map = this.a.getDistance();
+                if (map.get(n)!= null){
+                    if (pathValue > map.get(n)){
+                        pathValue = map.get(n);
+                        closest = r;
+                        r.setListNodes(rr);
+                    }
+                }
+            }
+        }
+        return closest;
+    }
+    
+    /**
+     * Update Fires List
+    */
+    public void updateFires(){
+        ArrayList<Node> fires = new ArrayList<>();
+        for (Node n : this.getGr().getListNodes()){
+            if (n.getType() == TypeNode.INCENDIE){
+                fires.add(n);
+            }
+        }
+        this.setListFires(fires);
+    }
+    
+    /**
+     * Get list of robot according a robot state
+     * @param etat State Robot
+     * @return (ArrayList<Robot>) List of Robot (StateRobot)
+    */
+    private ArrayList<Robot> getListRobot(StateRobot etat){
+        ArrayList<Robot> listMoving = new ArrayList<>();
+        for (Robot r : this.getListRobots()){
+            if (r.getState() == etat){
+                listMoving.add(r);
+            }
+        }
+        return listMoving;
+    }
+    
+    /**
+     * Update Busy Robots
+    */
+    private void updateBusyRobots(){
+        for(Robot r : this.getListRobots()){
+            for(Node n : this.getListFires()){
+                if (r.getN().equals(n)){
+                    r.setState(StateRobot.BUSY);
+                }
+            }   
+        }
+    }
+    
+    /**
+     * Get Recharging Place
+     * @return (ArrayList<Node>) List of Recharging Nodes
+    */
+    private ArrayList<Node> updateRechargingPlaces(){
+        ArrayList<Node> list = new ArrayList<>();
+        for (Node n : this.gr.getListNodes()){
+            if (n.getType() == TypeNode.RECHARGE){
+                list.add(n);
+            }
+        }
+        return list;
+    }
+    
+    /**
+     * Set path robot to go to a recharging place
+     * @param r Robot Concerned
+     * @param listRechargingPlace List of Recharging Nodes
+    */
+    private void closestRecharging(Robot r, ArrayList<Node> listRechargingPlace){
+        int pathValue = Integer.MAX_VALUE;
+        Map<Node,Integer> map = null;
+        for (Node n : listRechargingPlace){
+            LinkedList<Node> listNode = (this.a.shortestTrip(this.gr, n, r));
+            map = this.a.getDistance();
+            if (map.get(n) != null){
+                if (pathValue > map.get(n)){
+                    pathValue = map.get(n);
+                    r.setListNodes(listNode);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Reinitialize capacity of a robot (fill watter)
+     * @param r Robot Concerned
+    */
+    private void fillCapacity(Robot r){
+        if (r instanceof RobotCaterpillar){
+            r.setCapacity(RobotCaterpillar.getCapacity_());
+        }
+        if (r instanceof RobotCrossCountry){
+            r.setCapacity(RobotCrossCountry.getCapacity_());
+        }
+        if (r instanceof RobotLegs){
+            r.setCapacity(RobotLegs.getCapacity_());
+        }
+        r.setState(StateRobot.FREE);
+    }
+    
+    /**
+     * When a robot is extinguishing a fire, update flooded edges according a probability
+     * @param r Robot Concerned
+    */
     private void updateEdges(Robot r){
         ArrayList<Edge> listEdge = new ArrayList<>();
         for (Edge e : this.gr.getListEdges()){
@@ -197,7 +239,15 @@ public class MapManager extends Observable implements Runnable {
             }
         }
     }
-    private Edge findEdge(ArrayList<Edge> listEdge, Node n1, Node n2) {
+    
+    /**
+     * Find an edge on a list with its 2 nodes
+     * @param listEdge List of Edges
+     * @param n1 One of the Edge Node
+     * @param n2 The Other Node
+     * @return (Edge) Edge linking the 2 Edges
+    */
+    private Edge findEdge(ArrayList<Edge> listEdge, Node n1, Node n2){
         for (Edge e : listEdge){
             if ((e.getNode1().equals(n1) && e.getNode2().equals(n2))||(e.getNode1().equals(n2) && e.getNode2().equals(n1))){
                 return e;
@@ -205,47 +255,71 @@ public class MapManager extends Observable implements Runnable {
         }
         return null;
     }
-
-    public Graph getGr() {
+    
+    // GETTERS & SETTERS
+    
+    /**
+     * Get the graph
+     * @return (Graph) Graph
+    */
+    public Graph getGr(){
         return gr;
     }
 
-    public ArrayList<Robot> getListRobots() {
+    /**
+     * Set the graph
+     * @param gr Graph
+    */
+    public void setGr(Graph gr){
+        this.gr = gr;
+    }
+    
+    /**
+     * Get the robot list
+     * @return (ArrayList<Robot>) List of Robots on the Map
+    */
+    public ArrayList<Robot> getListRobots(){
         return listRobots;
     }
 
-    public void setListRobots(ArrayList<Robot> listRobots) {
+    /**
+     * Set the robot list
+     * @param listRobots  List of Robots
+    */
+    public void setListRobots(ArrayList<Robot> listRobots){
         this.listRobots = listRobots;
     }
 
-    public ArrayList<Node> getListFires() {
+    /**
+     * Get the fires list
+     * @return (ArrayList<Node>) List of Fires on the Map
+    */
+    public ArrayList<Node> getListFires(){
         return listFires;
     }
 
-    public void setListFires(ArrayList<Node> listFires) {
+    /**
+     * Set the fires list
+     * @param listFires List of Fires
+    */
+    public void setListFires(ArrayList<Node> listFires){
         this.listFires = listFires;
     }
 
-    public boolean isWait() {
-        return wait;
-    }
-
-    public void setWait(boolean wait) {
-        this.wait = wait;
-    }
-
-    public void setGr(Graph gr) {
-        this.gr = gr;
-    }
-
-    public void setM(PanelMap m) {
+    /**
+     * Set the panel
+     * @param m PanelMap
+    */
+    public void setM(PanelMap m){
         this.m = m;
     }
 
-    public void setA(Algorithme a) {
+    /**
+     * Set the algorithm
+     * @param a Algorithm
+    */
+    public void setA(Algorithm a){
         this.a = a;
     }
-
-   
     
 }

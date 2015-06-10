@@ -5,34 +5,40 @@ import java.io.*;
 import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import model.graph.Edge;
-import model.graph.Node;
-import model.graph.TypeEdge;
-import model.graph.TypeNode;
+import model.graph.*;
 import model.mapmanager.MapManager;
 import model.robot.Robot;
 
 /**
- *
- * @author Dylan
- */
+ * View PanelMap
+ * @author Dylan & Anthony
+*/
 public class PanelMap extends JPanel implements Observer {
 
-    // Attributes
+    // ATTRIBUTES
     private int width;
     private int height;
     private MapManager map;
     
-    // Constructors
+    // CONTRUCTORS
+    
+    /**
+     * Constructor of a PanelMap
+     * @param map MapManager Manager
+    */
     public PanelMap(MapManager map){
         super();
         this.map = map;
         this.map.setM(this);
     }
     
-    // Methods
+    // METHODS
+    /**
+     * Paint component PanelMap
+     * @param g Graphics
+    */
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g){
         super.paintComponent(g);
         Color c = g.getColor();
 	Dimension dim = getSize();
@@ -52,21 +58,40 @@ public class PanelMap extends JPanel implements Observer {
         showRobots(g);
     }
     
+    /**
+     * Add node
+     * @param n Node to Add
+    */
     public void addNode(Node n){
         this.getMap().getGr().getListNodes().add(n);
         update(n,this);
     }
     
+    /**
+     * Add edge
+     * @param e Edge to Add
+    */
     public void addEdge(Edge e){
         this.getMap().getGr().getListEdges().add(e);
         update(e,this);
     }
     
+    /**
+     * Add robot
+     * @param r Robot to Add
+    */
     public void addRobot(Robot r){
         this.getMap().getListRobots().add(r);
         update(r,this);
     }
     
+    // DRAW METHODS
+    
+    /**
+     * Draw a node
+     * @param n Node to Draw
+     * @param g Graphics
+    */
     private void drawNode(Node n, Graphics g){
         g.setColor(Color.BLACK);
         if (n.getType() == TypeNode.NORMAL){
@@ -89,6 +114,11 @@ public class PanelMap extends JPanel implements Observer {
         g.drawString(Integer.toString(n.getId()), (int)n.getX()-17, (int)n.getY());
     }
     
+    /**
+     * Draw an edge
+     * @param e Edge to Draw
+     * @param g Graphics
+    */
     private void drawEdge(Edge e, Graphics g){
         Color c = Color.BLACK;
         if (e.getType() == TypeEdge.ESCARPE){
@@ -102,12 +132,12 @@ public class PanelMap extends JPanel implements Observer {
         g.drawLine((int)e.getNode1().getX(), (int)e.getNode1().getY(), (int)e.getNode2().getX(), (int)e.getNode2().getY());
     }
     
-     /**
-     * Methods to draw a robot (specific to each robot)
+    /**
+     * Draw a robot
      * @param g Graphics
-     * @param x (abcisse) high left point of the robot image
-     * @param y (ordonnee) high left point of the robot image
-     * @param r robot drawn
+     * @param x Position on X
+     * @param y Position on Y
+     * @param r Robot to Draw
     */
     public void drawRobot(Graphics g, int x, int y, Robot r){
         try {
@@ -118,6 +148,10 @@ public class PanelMap extends JPanel implements Observer {
         }
     }
     
+    /**
+     * Show a graph
+     * @param g Graphics
+    */
     private void showGraph(Graphics g){
         if (!this.map.getGr().getListNodes().isEmpty()){
             for(Node n : this.getMap().getGr().getListNodes()){
@@ -131,39 +165,69 @@ public class PanelMap extends JPanel implements Observer {
         }
     }
     
-    @Override
-    public void update(Observable o, Object o1){
-        this.repaint();
-    }
-
-    // Getters & Setters
-    public void setWidth(int width){
-        this.width = width;
-    }
-    public void setHeight(int height){
-        this.height = height;
-    }
-
-    public void showRobots(Graphics g) {
+    /**
+     * Show a robot
+     * @param g Graphics
+    */
+    public void showRobots(Graphics g){
         for(Robot r : this.getMap().getListRobots()){
             drawRobot(g, (int)r.getN().getX()-10, (int)r.getN().getY()-12, r);
         }
     }
     
+    /**
+     * Show a fire
+     * @param g Graphics
+    */
     public void showFires(Graphics g){
         this.getMap().updateFires();
         for (Node n : this.getMap().getListFires()){
             drawNode(n, g);
         }
     }
+    
+    /**
+     * Update PanelMap
+     * @param o Observable
+     * @param o1 Object
+    */
+    @Override
+    public void update(Observable o, Object o1){
+        this.repaint();
+    }
 
-    public MapManager getMap() {
+    // GETTERS & SETTERS
+    
+    /**
+     * Set width of the JPanel
+     * @param width Width
+    */
+    public void setWidth(int width){
+        this.width = width;
+    }
+    
+    /**
+     * Set height of the JPanel
+     * @param height Height
+    */
+    public void setHeight(int height){
+        this.height = height;
+    }
+
+    /**
+     * Get the manager
+     * @return (MapManager) Manager 
+    */
+    public MapManager getMap(){
         return map;
     }
 
-    public void setMap(MapManager map) {
+    /**
+     * Set the manager
+     * @param map Manager
+    */
+    public void setMap(MapManager map){
         this.map = map;
     }
-
-    
+   
 }

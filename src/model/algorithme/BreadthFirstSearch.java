@@ -10,21 +10,39 @@ import model.graph.Node;
 import model.robot.Robot;
 
 /**
- *
- * @author Anthony
- */
-public class BreadthFirstSearch extends Algorithme{
+ * Model BreadthFirstSearch inherit Algorithm
+ * @author Dylan & Anthony
+*/
+public class BreadthFirstSearch extends Algorithm {
 
-    public enum COULEUR {WHITE, BLACK};
-    public Map<Node,COULEUR> color_nodes;
-    public Map<Node,LinkedList<Node>> path;
+    // ATTRIBUTES
+    /**
+     * Enum of Colors used to mark nodes
+    */
+    private enum COLORS { WHITE, BLACK };
+    private Map<Node,COLORS> color_nodes;
+    private Map<Node,LinkedList<Node>> path;
     
-    public BreadthFirstSearch() {
+    //CONSTRUCTORS
+    
+    /**
+     * Constructor of the BreadthFirstSearch Algorithm
+    */
+    public BreadthFirstSearch(){
         super();
     }
     
+    // SPECIFICS METHODS
+    
+    /**
+     * (Specific) Get list nodes corresponding to the trip
+     * @param g Graph Concerned
+     * @param n Arrival Node
+     * @param r Robot Concerned (Starting Node)
+     * @return (LinkedList<Node>) List of Nodes
+    */
     @Override
-    public LinkedList<Node> shortestTrip(Graph g, Node n, Robot r) {
+    public LinkedList<Node> shortestTrip(Graph g, Node n, Robot r){
         super.setListNodes((ArrayList<Node>) g.getListNodes().clone());
         super.setListEdges((ArrayList<Edge>) g.getListEdges().clone());
         super.setR(r);
@@ -34,24 +52,24 @@ public class BreadthFirstSearch extends Algorithme{
         LinkedList<Node> temp = new LinkedList<>();
         Node current = r.getN();
         file.add(current);
-        color_nodes.put(current, COULEUR.BLACK);
+        color_nodes.put(current, COLORS.BLACK);
         temp.add(current);
         while (!file.isEmpty()){
             current = file.get(0);
             file.remove(0);
             for(Node child : getNeighbours(current)){
                 int dist = super.getDistance().get(current);  
-                LinkedList<Node> chemversnoeud = new LinkedList<>();
-                chemversnoeud = (LinkedList<Node>) path.get(current).clone();
-                if(color_nodes.get(child)!=COULEUR.BLACK) {
+                LinkedList<Node> pathToNode = new LinkedList<>();
+                pathToNode = (LinkedList<Node>) path.get(current).clone();
+                if(color_nodes.get(child)!=COLORS.BLACK) {
                     file.add(child);
-                    color_nodes.put(child, COULEUR.BLACK);
-                    dist = dist + getLongueur(current, child);
+                    color_nodes.put(child, COLORS.BLACK);
+                    dist = dist + getLength(current, child);
                     super.getDistance().put(child, dist);
-                    chemversnoeud.add(child);
-                    path.put(child, chemversnoeud);
+                    pathToNode.add(child);
+                    path.put(child, pathToNode);
                     if (child.getId() == n.getId()){
-                        result = chemversnoeud;
+                        result = pathToNode;
                         return result;
                     }
                 }
@@ -60,21 +78,30 @@ public class BreadthFirstSearch extends Algorithme{
         return result;
     }
     
-    public void initList() {
+    /**
+     * (Specific) Check if the node is marked
+     * @param n Node Concerned
+     * @return (boolean) Node Marked
+    */
+    @Override
+    public boolean isMarked(Node n){
+        return COLORS.BLACK == color_nodes.get(n);
+    }
+    
+    // METHODS
+    
+    /**
+     * Initialize all lists
+    */
+    private void initList(){
         this.color_nodes = new HashMap<>();
         super.setDistance(new HashMap<Node,Integer>());
         this.path = new HashMap<>();
         for (Node n : super.getListNodes()) {
-            this.color_nodes.put(n, COULEUR.WHITE);
+            this.color_nodes.put(n, COLORS.WHITE);
             super.getDistance().put(n,0);
             this.path.put(n, new LinkedList<Node>());
         }
     }
-
-    
-    //garder
-    @Override
-    public boolean isMarked(Node n){
-        return COULEUR.BLACK == color_nodes.get(n);
-    }
+ 
 }

@@ -6,23 +6,24 @@ import model.graph.Edge;
 import model.graph.Node;
 
 /**
- *
- * @author Dylan
- */
+ * Model Robot
+ * @author Dylan & Anthony
+*/
 public abstract class Robot extends Observable {
     
-    // Attributes
+    // ATTRIBUTES
     private Node n;
     private StateRobot state;
     private LinkedList<Node> listNodes;
     private int capacity;
+    private int position;
     
     // CONSTRUCTORS
 
     /**
      * Constructors of a Robot
-     * @param n node where the robot is
-     */
+     * @param n Robot is Located on this Node
+    */
     public Robot(Node n){
         this.n = n;
         this.state = StateRobot.FREE;
@@ -33,10 +34,11 @@ public abstract class Robot extends Observable {
 
     /**
      * Move a robot to the first node in his list
-     * @param e
+     * @param e First Edge on the Move List
     */
     public void move(Edge e){
         if (e != null){
+            // check if the robot could cross the end of the edge
             if (this.getPosition()+this.getSpeed() >= e.getLength()){
                 this.getN().setFilled(false);
                 this.n = getListNodes().get(0);
@@ -44,6 +46,7 @@ public abstract class Robot extends Observable {
                 this.getN().setFilled(true);
                 this.setPosition(0);
             } else {
+                // the robot could cross the end of the edge so it move on the edge
                 this.setPosition(this.getPosition()+this.getSpeed());
             }
         }
@@ -52,15 +55,17 @@ public abstract class Robot extends Observable {
     }
  
     /**
-     * Extinguish the fire in th node where the robot is
+     * Extinguish the fire in robot node
     */
     public void extinguishFire(){
         int valueFire = this.getN().getFire() - this.capacity;
+        // check the new fire value
         if (valueFire <= 0){
             this.getN().extinguishFire();
             this.state = StateRobot.FREE;
             this.listNodes = null;
         } else {
+            // check if it remains watter on the robot
             if (this.capacity - this.getN().getFire() <= 0){
                 this.capacity = 0;
                 this.setState(StateRobot.ONRECHARGE);
@@ -70,78 +75,111 @@ public abstract class Robot extends Observable {
             }
             this.getN().setFire(valueFire);
         }
-        
         this.setChanged();
         this.notifyObservers();
     }
     
+    // SPECIFICS METHODS
+    
     /**
-     * To know if the robot can pass the edge (specific to each type of robot)
-     * @param e Edge concerned
-     * @return true if the robot can pass, else false 
+     * Test if the robot can pass the edge (specific to each type of robot)
+     * @param e Edge Concerned
+     * @return (boolean) Possibility of Crossing the Edge
     */
     public abstract boolean possibleTrip(Edge e);
+
+    /**
+     * Get the image path
+     * @return (String) Specific Robot Image Path
+    */
     public abstract String getImage();
-    public abstract int getPosition();
-    public abstract void setPosition(int position);
+
+    /**
+     * Get the robot speed
+     * @return (int) Specific Robot Speed
+    */
     public abstract int getSpeed();
     
     // GETTERS & SETTERS
 
     /**
-     *
-     * @return
-     */
-    public StateRobot getState() {
+     * Get the robot state
+     * @return (StateRobot) Robot State
+    */
+    public StateRobot getState(){
         return state;
     }
 
     /**
-     *
-     * @param state
-     */
-    public void setState(StateRobot state) {
+     * Set the state of the robot
+     * @param state Robot State
+    */
+    public void setState(StateRobot state){
         this.state = state;
     }
 
     /**
-     *
-     * @return
-     */
-    public Node getN() {
+     * Get the located node of the robot (position)
+     * @return (Node) Located Node
+    */
+    public Node getN(){
         return n;
     }
 
     /**
-     *
-     * @param n
-     */
-    public void setN(Node n) {
+     * Set the located node of the robot (position)
+     * @param n (Node) Located Node
+    */
+    public void setN(Node n){
         this.n = n;
     }
 
     /**
-     *
-     * @return
-     */
-    public LinkedList<Node> getListNodes() {
+     * Get the list of nodes of the robot (trip)
+     * @return (LinkedList<Node>) List of Nodes of the Robot
+    */
+    public LinkedList<Node> getListNodes(){
         return listNodes;
     }
 
     /**
-     *
-     * @param listNodes
-     */
-    public void setListNodes(LinkedList<Node> listNodes) {
+     * Set the list of nodes (trip)
+     * @param listNodes List of Nodes
+    */
+    public void setListNodes(LinkedList<Node> listNodes){
         this.listNodes = listNodes;
     }
 
-    public void setCapacity(int capacity) {
+    /**
+     * Get capacity (watter quantity)
+     * @return (int) Capacity
+    */
+    public int getCapacity(){
+        return capacity;
+    }
+    
+    /**
+     * Set capacity (watter quantity)
+     * @param capacity Capacity
+    */
+    public void setCapacity(int capacity){
         this.capacity = capacity;
     }
 
-    public int getCapacity() {
-        return capacity;
+    /**
+     * Get position on the current edge
+     * @return (int) Position on the Edge
+    */
+    public int getPosition(){
+        return this.position;
+    }
+
+    /**
+     * Set position on the current edge
+     * @param position Position on the Edge
+    */
+    public void setPosition(int position){
+        this.position = position;
     }
 
 }

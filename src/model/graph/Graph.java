@@ -7,28 +7,36 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
- * @author Dylan
- */
+ * Model Graph
+ * @author Dylan & Anthony
+*/
 public class Graph extends Observable {
     
-    // Attributes
+    // ATTRIBUTES
     private ArrayList<Node> listNodes;
     private ArrayList<Edge> listEdges;
     private boolean shown;
     
-    // Constructors
+    // CONSTRUCTORS
+
+    /**
+     * Constructor of a Graph
+    */
     public Graph(){
         this.listEdges = new ArrayList<>();
         this.listNodes = new ArrayList<>();
         this.shown = true;
     }
     
-    // Methods
+    // METHODS
+
+    /**
+     * Save the current graph in a chosen file
+    */
     public void createFile(){
         JFileChooser chooser = new JFileChooser();
         chooser.setAcceptAllFileFilterUsed(false);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Only xml files", "xml");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Only XML Files", "xml");
         chooser.addChoosableFileFilter(filter);
         chooser.showSaveDialog(null);
         File f = chooser.getSelectedFile();
@@ -57,6 +65,10 @@ public class Graph extends Observable {
         }
     }
     
+    /**
+     * Load graph from a chosen file
+     * @return (Graph) New Graph From File
+    */
     public Graph loadFile(){
         String path = "";
         JFileChooser choix = new JFileChooser();
@@ -100,6 +112,12 @@ public class Graph extends Observable {
         return g;
     }
     
+    /**
+     * Find node from its ID and the current graph
+     * @param g Current Graph
+     * @param id Node ID
+     * @return (Node) Node Found By Its ID
+    */
     private Node findNode(Graph g, int id){
         for(Node n : g.getListNodes()){
             if (n.getId() == id){
@@ -108,6 +126,13 @@ public class Graph extends Observable {
         }
         return null;
     }
+
+    /**
+     * Find Edge from its initial and final node
+     * @param n1 Initial or Final Node
+     * @param n2 Initial or Final Node
+     * @return (Edge) Edge Found By Its Initial and Final Node
+    */
     public Edge findEdge(Node n1, Node n2){
         for(Edge e: getListEdges()){
             if(e.getNode1().getId() == n1.getId() && e.getNode2().getId() == n2.getId())
@@ -117,25 +142,55 @@ public class Graph extends Observable {
         }
         return null;
     }
-    // Getters & Setters
+    
+    // GETTERS & SETTERS
+
+    /**
+     * Get the list of nodes of the graph
+     * @return (ArrayList<Node>) List of Nodes of the Graph
+    */
     public ArrayList<Node> getListNodes(){
         return listNodes;
     }
+
+    /**
+     * Set the list of nodes for the current graph
+     * @param list ArrayList containing Nodes
+    */
     public void setListNodes (ArrayList<Node> list){
         this.listNodes = list;
     }
-        public void setListEdge (ArrayList<Edge> list){
-        this.listEdges = list;
-    }
+
+    /**
+     * Get the list of edges of the graph
+     * @return (ArrayList<Edge>) List of Edges of the Graph
+    */
     public ArrayList<Edge> getListEdges(){
         return listEdges;
     }
+    
+    /**
+     * Set the list of edges for the current graph
+     * @param list ArrayList containing Edges
+    */
+    public void setListEdge (ArrayList<Edge> list){
+        this.listEdges = list;
+    }
 
-    public boolean isShown() {
+    /**
+     * Get if the graph is shown or not
+     * @return (boolean) Parameter Shown
+    */
+    public boolean isShown(){
         return shown;
     }
 
-    public void setShown(boolean shown) {
+    /**
+     * Set parameter shown to show or not the graph
+     * @param shown Boolean Graph Shown
+    */
+    public void setShown(boolean shown){
         this.shown = shown;
     }
+    
 }

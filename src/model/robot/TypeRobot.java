@@ -1,9 +1,9 @@
 package model.robot;
 
 /**
- *
- * @author Dylan
- */
+ * Enum of Robot Type
+ * @author Dylan & Anthony
+*/
 public enum TypeRobot {
     TOUT_TERRAIN, A_CHENILLES, A_PATTES;
 }

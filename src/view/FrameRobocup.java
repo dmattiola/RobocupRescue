@@ -13,12 +13,12 @@ import model.mapmanager.MapManager;
 import model.robot.TypeRobot;
 
 /**
- *
- * @author Dylan
- */
+ * View FrameRobocup
+ * @author Dylan & Anthony
+*/
 public class FrameRobocup extends JFrame {
     
-    // Attributes
+    // ATTRIBUTES
     public static final Dimension VGAP = new Dimension(1,5);
     public static final Dimension HGAP = new Dimension(5,1);
     public static final String[] listAglo = {"Dijkstra", "Largeur" };
@@ -27,7 +27,13 @@ public class FrameRobocup extends JFrame {
     private TypeEdge typeedge = TypeEdge.PLAT;
     private TypeRobot typerobot = TypeRobot.TOUT_TERRAIN;
     
-    // Constructors
+    // CONSTRUCTORS
+    
+    /**
+     * Constructor of a FrameRobocup
+     * @param c Controller
+     * @param gr Graph
+    */
     public FrameRobocup(Controller c, Graph gr){
         super("Robocup Rescue");
         this.c = c;
@@ -44,28 +50,49 @@ public class FrameRobocup extends JFrame {
         c.changeButtons(true);
     }
     
-    // Methods
-    public void quitter(){
+    // METHODS
+    
+    /**
+     * Quit the program
+    */
+    public void quit(){
         System.exit(0);
     }
     
-    public void effacer(){
+    /**
+     * Delete the current graph
+    */
+    public void delete(){
         map.getMap().setGr(new Graph());
 	map.repaint();
         Node.setNb_node(0);
         JOptionPane.showMessageDialog(this, "Vous avez effacé le graphe en cours.");
     }
     
+    /**
+     * Change the button name : Afficher / Cacher
+     * @param name afficher ou cacher
+    */
     public void changeHide(String name){
         ((JButton)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(1)).setName(name);
         ((JButton)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(1)).setText(name);
         ((JButton)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(1)).setToolTipText(name);
     }
     
+    /**
+     * Get the JLabel intensity of the fire
+     * @return (int) Fire Intensity
+    */
     public int getIntensityFire(){
         return Integer.parseInt(((JTextField)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(13)).getText().toString());
     }
     
+    // CONSTRUCTIONS FRAME METHODS
+    
+    /**
+     * Frame initialization and construction 
+     * @param g (Graph)
+    */
     private void initFrame(Graph g){
         getContentPane().setLayout(new BorderLayout(10,10));
 
@@ -165,7 +192,12 @@ public class FrameRobocup extends JFrame {
         c.setPm(map);
     }
     
-    //utilitaires pour installer des boutons et des menus
+    /**
+     * Util to set up a button
+     * @param name Button Name
+     * @param tooltiptext Button ToolTipText
+     * @param imageName Button ImageName
+    */
     private void addButton(JComponent p, String name, String tooltiptext, String imageName){
         JButton b;
 	if ((imageName == null) || (imageName.equals(""))){
@@ -186,6 +218,13 @@ public class FrameRobocup extends JFrame {
 	b.addActionListener(c);
     }
 
+    /**
+     * Util to set up a MenuItem
+     * @param m JMenu
+     * @param label Item Label
+     * @param command Item Command
+     * @param key Item Key
+    */
     private void addMenuItem(JMenu m, String label, String command, int key){
         JMenuItem menuItem;
         menuItem = new JMenuItem(label);
@@ -202,23 +241,45 @@ public class FrameRobocup extends JFrame {
        }
     }
 
+    // GETTERS & SETTERS
+    
+    /**
+     * Get the algorithm in the enum
+     * @return (String) Algorithm
+    */
     public String getAlgorithme(){
         return ((JComboBox)((JPanel)this.getContentPane().getComponent(2)).getComponent(3)).getSelectedItem().toString();
     }
     
-    public TypeEdge getTypeedge() {
+    /**
+     * Get the current edge type
+     * @return (TypeEdge) Edge Type
+    */
+    public TypeEdge getTypeedge(){
         return typeedge;
     }
 
-    public void setTypeedge(TypeEdge typeedge) {
+    /**
+     * Set the current edge type
+     * @param typeedge Edge Type 
+    */
+    public void setTypeedge(TypeEdge typeedge){
         this.typeedge = typeedge;
     }
 
-    public TypeRobot getTyperobot() {
+    /**
+     * Get the current robot type
+     * @return (TypeRobot) Robot Type
+    */
+    public TypeRobot getTyperobot(){
         return typerobot;
     }
 
-    public void setTyperobot(TypeRobot typerobot) {
+    /**
+     * Set the current robot type
+     * @param typerobot Robot Type 
+    */
+    public void setTyperobot(TypeRobot typerobot){
         this.typerobot = typerobot;
     }
     
