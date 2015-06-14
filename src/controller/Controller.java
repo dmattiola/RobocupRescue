@@ -118,7 +118,7 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
                     JOptionPane.showMessageDialog(pm, "Vous n'avez pas cliqué sur un noeud.");
                 } else {
                     if (selectedNode != null && !n.equals(selectedNode)){     
-                        pm.addEdge(new Edge(n,selectedNode,this.fr.getTypeedge()));
+                        pm.addEdge(new Edge(n,selectedNode,this.fr.getTypeEdgeCurrent()));
                         this.action = "";
                         this.selectedNode = null;
                     }
@@ -155,14 +155,17 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
                     JOptionPane.showMessageDialog(pm, "Vous devez ajouter un robot sur un noeud.");
                 }
                 else {
-                    if (this.fr.getTyperobot() == TypeRobot.TOUT_TERRAIN){
-                        this.pm.addRobot(new RobotCrossCountry(n));
-                    }
-                    if (this.fr.getTyperobot() == TypeRobot.A_PATTES){
-                        this.pm.addRobot(new RobotLegs(n));
-                    }
-                    if (this.fr.getTyperobot() == TypeRobot.A_CHENILLES){
-                        this.pm.addRobot(new RobotCaterpillar(n));
+                    String typerobot = this.fr.getTypeRobotCurrent();
+                    switch(typerobot){
+                        case "TOUT TERRAIN":
+                            this.pm.addRobot(new RobotCrossCountry(n));
+                            break;
+                        case "A CHENILLES":
+                            this.pm.addRobot(new RobotCaterpillar(n));
+                            break;
+                        case "A PATTES":
+                            this.pm.addRobot(new RobotLegs(n));
+                            break;
                     }
                 }
                 break;
@@ -190,19 +193,13 @@ public class Controller implements ActionListener, MouseListener, ItemListener {
     public void itemStateChanged(ItemEvent ie){
         JComboBox cb = (JComboBox)ie.getSource();
         Object type = cb.getSelectedItem();
-        if (type instanceof TypeEdge){
-            this.fr.setTypeedge(TypeEdge.valueOf(type.toString()));
-        } else if (type instanceof TypeRobot){
-            this.fr.setTyperobot(TypeRobot.valueOf(type.toString()));
-        } else {
-            switch(this.fr.getAlgorithme()){
-                case "Dijkstra":
-                    this.manager.setA(new Dijkstra());
-                    break;
-                case "Largeur":
-                    this.manager.setA(new BreadthFirstSearch());
-                    break;
-            }
+        switch(this.fr.getAlgorithme()){
+            case "Dijkstra":
+                this.manager.setA(new Dijkstra());
+                break;
+            case "Largeur":
+                this.manager.setA(new BreadthFirstSearch());
+                break;
         }
     }
     

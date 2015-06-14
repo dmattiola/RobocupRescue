@@ -10,7 +10,6 @@ import model.graph.Graph;
 import model.graph.Node;
 import model.graph.TypeEdge;
 import model.mapmanager.MapManager;
-import model.robot.TypeRobot;
 
 /**
  * View FrameRobocup
@@ -21,11 +20,10 @@ public class FrameRobocup extends JFrame {
     // ATTRIBUTES
     public static final Dimension VGAP = new Dimension(1,5);
     public static final Dimension HGAP = new Dimension(5,1);
-    public static final String[] listAglo = {"Dijkstra", "Largeur" };
+    public static final String[] listAlgo = {"Dijkstra", "Largeur" };
+    public static final String[] listTypeRobot = {"TOUT TERRAIN", "A CHENILLES", "A PATTES"};
     private PanelMap map;
     private final Controller c;
-    private TypeEdge typeedge = TypeEdge.PLAT;
-    private TypeRobot typerobot = TypeRobot.TOUT_TERRAIN;
     
     // CONSTRUCTORS
     
@@ -80,6 +78,32 @@ public class FrameRobocup extends JFrame {
     }
     
     /**
+     * Get type edge to create the edge
+     * @return Current Type Edge
+     */
+    public TypeEdge getTypeEdgeCurrent(){
+        String typeedge = ((JComboBox)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(9)).getSelectedItem().toString();
+        switch(typeedge){
+            case "PLAT":
+                return TypeEdge.PLAT;
+            case "INONDE":
+                return TypeEdge.INONDE;
+            case "ESCARPE":
+                return TypeEdge.ESCARPE;
+        }
+        return null;
+    }
+    
+    /**
+     * Get type robot to create the robot
+     * @return Current Type Robot
+     */
+    public String getTypeRobotCurrent(){
+        String typerobot = ((JComboBox)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(19)).getSelectedItem().toString();
+        return typerobot;
+    }
+    
+    /**
      * Get the JLabel intensity of the fire
      * @return (int) Fire Intensity
     */
@@ -126,7 +150,6 @@ public class FrameRobocup extends JFrame {
         toolBar.add(Box.createRigidArea(HGAP));
         JComboBox typeEdgeList = new JComboBox(TypeEdge.values());
         toolBar.add(typeEdgeList);
-        typeEdgeList.addItemListener(c);
         toolBar.add(Box.createRigidArea(HGAP));
         addButton(toolBar, "Incendie", "Ajouter Incendie", null);
         toolBar.add(Box.createRigidArea(HGAP));
@@ -137,9 +160,8 @@ public class FrameRobocup extends JFrame {
         toolBar.add(Box.createRigidArea(HGAP));
         addButton(toolBar, "Robot", "Ajouter Robot", null);
         toolBar.add(Box.createRigidArea(HGAP));
-        JComboBox typeRobotList = new JComboBox(TypeRobot.values());
+        JComboBox typeRobotList = new JComboBox(listTypeRobot);
         toolBar.add(typeRobotList);
-        typeRobotList.addItemListener(c);
 
         // Menus
         JMenuBar menubar=new JMenuBar();
@@ -181,7 +203,7 @@ public class FrameRobocup extends JFrame {
         b22.addActionListener(c);
         JLabel algo = new JLabel(" Algorithme : ",SwingConstants.CENTER);
         p2.add(algo);
-        JComboBox listAlgorithme = new JComboBox(listAglo);
+        JComboBox listAlgorithme = new JComboBox(listAlgo);
         p2.add(listAlgorithme);
         listAlgorithme.addItemListener(c);
         getContentPane().add(p2,"South");
@@ -250,37 +272,6 @@ public class FrameRobocup extends JFrame {
     public String getAlgorithme(){
         return ((JComboBox)((JPanel)this.getContentPane().getComponent(2)).getComponent(3)).getSelectedItem().toString();
     }
-    
-    /**
-     * Get the current edge type
-     * @return (TypeEdge) Edge Type
-    */
-    public TypeEdge getTypeedge(){
-        return typeedge;
-    }
 
-    /**
-     * Set the current edge type
-     * @param typeedge Edge Type 
-    */
-    public void setTypeedge(TypeEdge typeedge){
-        this.typeedge = typeedge;
-    }
-
-    /**
-     * Get the current robot type
-     * @return (TypeRobot) Robot Type
-    */
-    public TypeRobot getTyperobot(){
-        return typerobot;
-    }
-
-    /**
-     * Set the current robot type
-     * @param typerobot Robot Type 
-    */
-    public void setTyperobot(TypeRobot typerobot){
-        this.typerobot = typerobot;
-    }
     
 }
