@@ -175,15 +175,14 @@ public class FrameRobocup extends JFrame {
 
         JMenu menuGraph=new JMenu("Graphe");
         menubar.add(menuGraph);
-        addMenuItem(menuGraph, "Ajouter Noeud", "Ajouter Noeud", -1);
-        addMenuItem(menuGraph, "Ajouter Arc", "Ajouter Arc", -1);
+        addMenuItem(menuGraph, "Noeud", "Noeud", -1);
+        addMenuItem(menuGraph, "Arc", "Arc", -1);
         addMenuItem(menuGraph, "Sauvegarder", "Sauvegarder", -1);
         addMenuItem(menuGraph, "Charger", "Charger", -1);
 
         JMenu menuSimulation=new JMenu("Simulation");
         menubar.add(menuSimulation);
         addMenuItem(menuSimulation, "Lancer", "Lancer", -1);
-        addMenuItem(menuSimulation, "Suspendre / Reprendre", "Suspendre / Reprendre", -1);
         addMenuItem(menuSimulation, "Arrêter", "Arrêter", -1);
 
         JMenu menuHelp=new JMenu("Aide");
