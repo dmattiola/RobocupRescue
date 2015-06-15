@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package test.model.graph;
 
 import java.util.ArrayList;
@@ -11,46 +6,53 @@ import model.graph.Graph;
 import model.graph.Node;
 import model.graph.TypeEdge;
 import model.graph.TypeNode;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author Anthony
+ * Test JUnit on Model Graph
+ * @author Dylan & Anthony
  */
 public class GraphJUnitTest {
-    public Graph g;
-    public GraphJUnitTest() {
-    }
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
+    private Graph g;
+    private ArrayList<Edge> listEdge;
+    private ArrayList<Node> listNode;
     
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    /**
+     * Constructor of JUnit graph test
+    */
+    public GraphJUnitTest(){ }
     
+    /**
+     * Initialize the test graph and lists
+    */
     @Before
-    public void setUp() {
+    public void setUp(){
         g = new Graph();
-        ArrayList<Node> list = new ArrayList<>();
-        /*list.add(new Node(0,0,"INCENDIE"));
-        list.add(new Node(1,1,"BASE"));
-        list.add(new Node(2,2,3,"INCENDIE"));*/
-    }
-    
-    @After
-    public void tearDown() {
+        listNode = new ArrayList<>();
+        listNode.add(new Node(0,0,TypeNode.INCENDIE));
+        listNode.add(new Node(1,1,TypeNode.NORMAL));
+        listNode.add(new Node(2,2,3,TypeNode.RECHARGE));
+        g.setListNodes(listNode);
+        listEdge = new ArrayList<>();
+        listEdge.add(new Edge(listNode.get(0),listNode.get(1),TypeEdge.PLAT));
+        listEdge.add(new Edge(listNode.get(1),listNode.get(2),TypeEdge.INONDE));
+        g.setListEdge(listEdge);
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
+    /**
+     * 
+    */
+    @Test
+    public void testFindEdge(){
+        Edge e = g.findEdge(listNode.get(0), listNode.get(1));
+        assertTrue("Arc trouvé", e != null);
+        e = g.findEdge(listNode.get(0), listNode.get(2));
+        assertTrue("Arc non trouvé", e == null);
+    }
+    
     @Test
     public void testLoadFile() {
         g = g.loadFile();

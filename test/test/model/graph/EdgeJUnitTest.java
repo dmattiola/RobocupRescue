@@ -25,7 +25,7 @@ public class EdgeJUnitTest {
      * Initialize the test edge
     */
     @Before
-    public void setUp() {
+    public void setUp(){
         Node n1 = new Node(0, 0, TypeNode.NORMAL);
         Node n2 = new Node(10, 10, TypeNode.RECHARGE);
         e = new Edge(n1, n2, TypeEdge.PLAT);
