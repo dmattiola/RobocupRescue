@@ -13,14 +13,8 @@ import static org.junit.Assert.*;
  */
 public class NodeJUnitTest {
 
-    /**
-     * test node 1
-    */
-    public Node nodeI;
-    /**
-     * test node 2
-    */
-    public Node nodeB;
+    private Node nodeI;
+    private Node nodeB;
 
     /**
      * Constructor of JUnit node test
