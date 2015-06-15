@@ -62,11 +62,12 @@ public class MapManager extends Observable implements Runnable {
             for(Robot r : listRecharging){
                 if (r.getListNodes() == null){
                     closestRecharging(r,listRechargingPlace);
-                }
-                if (r.getListNodes().size() == 0){
-                    fillCapacity(r);
                 } else {
-                    r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
+                    if (r.getListNodes().size() == 0){
+                        fillCapacity(r);
+                    } else {
+                        r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
+                    }
                 }
             }
             // ON PARCOURS LA LISTE DES FEUX QUI NE SONT PAS OCCUPES

@@ -84,7 +84,7 @@ public class FrameRobocup extends JFrame {
     public TypeEdge getTypeEdgeCurrent(){
         String typeedge = ((JComboBox)((JToolBar)((JPanel)this.getContentPane().getComponent(1)).getComponent(0)).getComponent(9)).getSelectedItem().toString();
         switch(typeedge){
-            case "PLAT":
+            case "PLAT ":
                 return TypeEdge.PLAT;
             case "INONDE":
                 return TypeEdge.INONDE;
