@@ -1,61 +1,63 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package test.model.graph;
 
 import model.graph.Node;
 import model.graph.TypeNode;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 
 /**
- *
- * @author Anthony
+ * Test JUnit on Model Node
+ * @author Dylan & Anthony
  */
 public class NodeJUnitTest {
+
+    /**
+     * test node 1
+    */
     public Node nodeI;
+    /**
+     * test node 2
+    */
     public Node nodeB;
-    public NodeJUnitTest() {
-    }
+
+    /**
+     * Constructor of JUnit node test
+    */
+    public NodeJUnitTest(){ }
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
+    /**
+     * Initialize the two test nodes
+    */
     @Before
     public void setUp() {
         nodeI = new Node(0,0,TypeNode.INCENDIE);
         nodeB = new Node(1,1, TypeNode.NORMAL);
     }
-    
-    @After
-    public void tearDown() {
+
+    /**
+     * Test function kindleFire
+     * if fire value > 0
+     * and fire type is INCENDIE
+    */
+    @Test
+    public void testKindleFire(){
+        nodeB.kindleFire(50);
+        assertTrue("Feu allumé", nodeB.getFire() > 0);
+        assertTrue("Feu allumé", nodeB.getType() == TypeNode.INCENDIE);
+    }
+     
+    /**
+     * Test function extinguishFire
+     * if fire value == 0
+     * and fire type is NORMAL
+    */
+    @Test
+    public void testExtinguishFire(){
+        nodeI.extinguishFire();
+        assertTrue("Feu eteint", nodeI.getFire() == 0);
+        assertTrue("Feu allumé", nodeI.getType() == TypeNode.NORMAL);
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-     @Test
-     public void testKindleFire() {
-        nodeB.kindleFire();
-        assertTrue("Feu allumé", nodeB.getFire() == 50);
-        assertTrue("Feu allumé", nodeB.getType() == TypeNode.INCENDIE);
-     }
-     @Test
-     public void testExtinguishFire() {
-        nodeI.extinguishFire();
-        assertTrue("Feu etein", nodeI.getFire() ==0);
-        assertTrue("Feu allumé", nodeB.getType() == TypeNode.NORMAL);
-     }
 }
