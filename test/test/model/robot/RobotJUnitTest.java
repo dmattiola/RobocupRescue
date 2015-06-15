@@ -1,72 +1,70 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package test.model.robot;
 
+import java.util.LinkedList;
 import model.graph.Edge;
 import model.graph.Node;
 import model.graph.TypeEdge;
 import model.graph.TypeNode;
 import model.robot.Robot;
 import model.robot.RobotCaterpillar;
-import model.robot.RobotCrossCountry;
-import model.robot.RobotLegs;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author Anthony
+ * Test JUnit on Model Robot
+ * @author Dylan & Anthony
  */
 public class RobotJUnitTest {
-    public Robot r;
-    public Edge eesc, einon;
-    public RobotJUnitTest() {
-    }
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
+    private Robot r;
     
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-        eesc = new Edge(new Node(0,0,TypeNode.NORMAL), new Node(1,2,TypeNode.NORMAL), TypeEdge.ESCARPE);
-        einon = new Edge(new Node(0,0,TypeNode.NORMAL), new Node(1,2,TypeNode.NORMAL), TypeEdge.INONDE);
-    }
-    
-    @After
-    public void tearDown() {
-    }
+    /**
+     * Constructor of JUnit Robot test
+    */
+    public RobotJUnitTest(){ }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    @Test
-    public void testTrip() {
-        r = new RobotCaterpillar(eesc.getNode1());
-        assertTrue("Erreur caterpillar escarpe",!r.possibleTrip(eesc));
-        r = new RobotCaterpillar(einon.getNode1());
-        assertTrue("Erreur caterpillar inondé", r.possibleTrip(einon));
-        r = new RobotCrossCountry(eesc.getNode1());
-        assertTrue("Erreur Cross Country escarpe" , r.possibleTrip(eesc));
-        r = new RobotCrossCountry(einon.getNode1());
-        assertTrue("Erreur Cross Country inondé" , r.possibleTrip(einon));
-        r = new RobotLegs(eesc.getNode1());
-        assertTrue("Erreur Legs escarpe" , r.possibleTrip(eesc));
-        r = new RobotLegs(einon.getNode1());
-        assertTrue("Erreur Legs inondé" , !r.possibleTrip(einon));
-        
-        
-        
+    /**
+     * Initialize the test Robot
+    */
+    @Before
+    public void setUp(){
+        r = new RobotCaterpillar(new Node(0,0,TypeNode.NORMAL));
     }
+   
+    /**
+     * Test the function move
+    */
+    @Test
+    public void testMove(){
+        Node n1 = r.getN();
+        Node n2 = new Node(r.getSpeed()+10,10,TypeNode.NORMAL);
+        LinkedList<Node> listNodes = new LinkedList<>();
+        listNodes.add(n1);
+        listNodes.add(n2);
+        r.setListNodes(listNodes);
+        Edge e = new Edge(n1,n2,TypeEdge.PLAT);
+        assertTrue("Le robot a avancé sur l'arc",r.getPosition()+r.getSpeed() < e.getLength());
+        r.move(e);
+        assertTrue("Le robot a changé de noeud",r.getPosition()+r.getSpeed() >= e.getLength());
+        r.move(e);
+        // same work with the other robots
+    }
+    
+    /**
+     * Test the function extinguishFire
+    */
+    @Test
+    public void testExtinguishFire(){
+        r.getN().setType(TypeNode.INCENDIE);
+        r.getN().kindleFire(50);
+        int valueFire = r.getN().getFire() - r.getCapacity();
+        int watter = r.getCapacity() - r.getN().getFire();
+        r.extinguishFire();
+        assertTrue("Vide sa capacité sur le feu et va remplir son reservoir", r.getN().getFire() > 0 && r.getCapacity() <= 0);
+        r.setCapacity(40);
+        r.extinguishFire();
+        assertTrue("Le Robot éteint le feu",r.getN().getFire() <= 0);
+    }
+    
 }

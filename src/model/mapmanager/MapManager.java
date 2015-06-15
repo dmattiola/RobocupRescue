@@ -54,8 +54,7 @@ public class MapManager extends Observable implements Runnable {
             listBusy = getListRobot(StateRobot.BUSY);
             // ON FAIT BOUGER LES ROBOTS MOVING
             listMoving = getListRobot(StateRobot.MOVING);
-            listRecharging = getListRobot(StateRobot.ONRECHARGE);
-            
+            listRecharging = getListRobot(StateRobot.ONRECHARGE);            
             for(Robot r : listMoving){
                 r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
             }
@@ -91,7 +90,6 @@ public class MapManager extends Observable implements Runnable {
                 r.extinguishFire();
                 updateEdges(r);
             }
-            
             this.setChanged();
             this.notifyObservers();
             this.m.repaint();
@@ -165,7 +163,9 @@ public class MapManager extends Observable implements Runnable {
         for(Robot r : this.getListRobots()){
             for(Node n : this.getListFires()){
                 if (r.getN().equals(n)){
-                    r.setState(StateRobot.BUSY);
+                    if (!r.getState().equals(StateRobot.ONRECHARGE)){
+                        r.setState(StateRobot.BUSY);
+                    }
                 }
             }   
         }
