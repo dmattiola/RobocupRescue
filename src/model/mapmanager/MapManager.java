@@ -51,7 +51,8 @@ public class MapManager extends Observable implements Runnable {
             listRechargingPlace = updateRechargingPlaces();
             listBusy = getListRobot(StateRobot.BUSY);
             listMoving = getListRobot(StateRobot.MOVING);
-            listRecharging = getListRobot(StateRobot.ONRECHARGE);            
+            listRecharging = getListRobot(StateRobot.ONRECHARGE);
+            System.out.println("nb feux "+this.listFires.size());
             for(Robot r : listMoving){
                 r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
             }
@@ -61,12 +62,14 @@ public class MapManager extends Observable implements Runnable {
                 } else {
                     if (r.getListNodes().size() == 0){
                         fillCapacity(r);
+                        unfilled(r.getN());
                     } else {
                         r.move(findEdge(this.gr.getListEdges(),r.getN(),r.getListNodes().get(0)));
                     }
                 }
             }
             for (Node n : this.listFires){
+                System.out.println("fire occupé "+n.isFilled());
                 if (!n.isFilled()){
                     Robot r = closestRobot(n);   
                     if (r != null){
@@ -80,6 +83,7 @@ public class MapManager extends Observable implements Runnable {
             for (Robot r : listBusy){
                 r.extinguishFire();
                 updateEdges(r);
+                unfilled(r.getN());
             }
             this.setChanged();
             this.notifyObservers();
@@ -117,6 +121,18 @@ public class MapManager extends Observable implements Runnable {
             }
         }
         return closest;
+    }
+    
+    /**
+     * Unfilled a node
+     * @param n Node to unfilled
+    */
+    private void unfilled(Node n){
+        for (Node ne : this.gr.getListNodes()){
+            if(ne.equals(n)){
+                ne.setFilled(false);
+            }
+        }
     }
     
     /**
@@ -191,6 +207,7 @@ public class MapManager extends Observable implements Runnable {
                 if (pathValue > map.get(n)){
                     pathValue = map.get(n);
                     r.setListNodes(listNode);
+                    r.getN().setFilled(true);
                 }
             }
         }

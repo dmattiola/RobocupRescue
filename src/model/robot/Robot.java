@@ -61,6 +61,7 @@ public abstract class Robot extends Observable {
         int valueFire = this.getN().getFire() - this.capacity;
         // check the new fire value
         if (valueFire <= 0){
+            this.capacity = this.capacity - this.getN().getFire();
             this.getN().extinguishFire();
             this.state = StateRobot.FREE;
             this.listNodes = null;
@@ -70,12 +71,10 @@ public abstract class Robot extends Observable {
                 this.capacity = 0;
                 this.setState(StateRobot.ONRECHARGE);
                 this.listNodes = null;
-            } else {
-                System.out.println("je suis fu");
-                this.capacity = this.capacity - this.getN().getFire();
             }
             this.getN().setFire(valueFire);
         }
+        this.getN().setFilled(false);
         this.setChanged();
         this.notifyObservers();
     }
