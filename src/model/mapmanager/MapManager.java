@@ -47,12 +47,9 @@ public class MapManager extends Observable implements Runnable {
         ArrayList<Robot> listBusy, listMoving, listRecharging = new ArrayList<>();
         ArrayList<Node> listRechargingPlace = new ArrayList<>();
         while(this.isRunning){
-            // MISE A JOUR DES FEUX
             updateFires(); 
             listRechargingPlace = updateRechargingPlaces();
-            // RECUPERE LES ROBOTS OCCUPES
             listBusy = getListRobot(StateRobot.BUSY);
-            // ON FAIT BOUGER LES ROBOTS MOVING
             listMoving = getListRobot(StateRobot.MOVING);
             listRecharging = getListRobot(StateRobot.ONRECHARGE);            
             for(Robot r : listMoving){
@@ -69,12 +66,9 @@ public class MapManager extends Observable implements Runnable {
                     }
                 }
             }
-            // ON PARCOURS LA LISTE DES FEUX QUI NE SONT PAS OCCUPES
             for (Node n : this.listFires){
                 if (!n.isFilled()){
-                    // ON CHERCHE LE ROBOT LE PLUS PRES
                     Robot r = closestRobot(n);   
-                    // SI ON LE TROUVE IL AVANCE
                     if (r != null){
                         n.setFilled(true);
                         r.setState(StateRobot.MOVING);
@@ -82,10 +76,7 @@ public class MapManager extends Observable implements Runnable {
                     }
                 }
             }
-            // MISE A JOUR DES ROBOTS OCCUPEES
-            // ON A DONC LES ROBOTS OCCUPES, LES ROBOTS EN MOUVEMENT sont à jour
             updateBusyRobots();
-            // POUR LES ROBOTS OCCUPES cad ETEIGNE LE FEU
             for (Robot r : listBusy){
                 r.extinguishFire();
                 updateEdges(r);
@@ -108,7 +99,7 @@ public class MapManager extends Observable implements Runnable {
      * @param n Node Concerned
      * @return (Robot) Closest Robot
     */
-    private Robot closestRobot(Node n){
+    public Robot closestRobot(Node n){
         int pathValue = Integer.MAX_VALUE;
         Robot closest = null;
         Map<Node,Integer> map = null;

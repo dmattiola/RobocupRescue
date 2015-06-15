@@ -1,51 +1,45 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package test.model.algorithm;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Map;
-import model.algorithme.Algorithm;
-import model.graph.Edge;
-import model.graph.Graph;
-import model.graph.Node;
-import model.graph.TypeEdge;
-import model.graph.TypeNode;
+import model.algorithme.BreadthFirstSearch;
+import model.graph.*;
 import model.robot.Robot;
 import model.robot.RobotLegs;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test BreadthFirstSearchJunitTest
+ * Test BreadthFirstSearchJUnitTestJunitTest
  * @author Dylan & Anthony
 */
-
-public class BreadthFirstSearch {
-    public ArrayList<Node> listN;
-    public ArrayList<Edge> listE;
-    public Robot rt;
-    public Node nt1,nt2,nt3;
-    public Map<Node,Integer> distance; 
-    public model.algorithme.BreadthFirstSearch algo;
-    public Graph g;
-    public BreadthFirstSearch() {
+public class BreadthFirstSearchJUnitTest {
+    
+    private ArrayList<Node> listN;
+    private ArrayList<Edge> listE;
+    private Robot rt;
+    private Node nt1,nt2,nt3;
+    private BreadthFirstSearch algo;
+    private Graph g;
+    
+    /**
+     * Constructor of JUnit BreadthFirstSearch test
+    */
+    public BreadthFirstSearchJUnitTest(){
         this.listN = new ArrayList<>();
         this.listE = new ArrayList<>();
         this.rt = null;
-        algo = new model.algorithme.BreadthFirstSearch();
+        algo = new BreadthFirstSearch();
         g = new Graph();
     }
     
     
-
+    /**
+     * Initialize all objects to test BreadthFirstSearch methods
+    */
     @Before
-    public void setUp() {
+    public void setUp(){
         Edge e1, e2, e3, e4, e5,e6;
         Node n1 ,n2,n3,n4,n5,n6;
         n1 = new Node(1,0, 100, TypeNode.NORMAL);
@@ -70,16 +64,12 @@ public class BreadthFirstSearch {
         nt2 = n5;
         nt3 = n6;
     }
-    
-    @After
-    public void tearDown() {
-    }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
+    /**
+     * Test function shortestTrip
+    */
     @Test
-    public void testShortestTrip() {
+    public void testShortestTrip(){
         LinkedList<Node> res = algo.shortestTrip(g, nt1, rt);
         assertTrue("Wrong Path to nt1 (size error) (easy path)", res.size() == 2);
         assertTrue("Wrong Path to nt1 (itineraire faux 1)(easy path)", res.get(0).getId()==3);
@@ -93,4 +83,5 @@ public class BreadthFirstSearch {
         res = algo.shortestTrip(g, nt3, rt);
         assertTrue("Wrong Path to nt3 (not null path) (impossible path)", res==null);
     }
+    
 }

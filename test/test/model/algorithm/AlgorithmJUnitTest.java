@@ -1,46 +1,44 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package test.model.algorithm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import model.graph.Edge;
-import model.graph.Node;
-import model.graph.TypeEdge;
-import model.graph.TypeNode;
-import model.robot.Robot;
+import model.algorithme.Dijkstra;
+import model.graph.*;
 import model.robot.RobotLegs;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test AlgorithmeJunitTest
+ * Test JUnit on Model AlgorithmJUnitTest
  * @author Dylan & Anthony
 */
-public class Algorithm {
-    public ArrayList<Node> listN;
-    public ArrayList<Edge> listE;
-    public Robot rt;
-    public Map<Node,Integer> distance; 
-    public model.algorithme.Dijkstra algo;
-    public Algorithm() {
-    }
+public class AlgorithmJUnitTest {
     
+    private ArrayList<Node> listN;
+    private ArrayList<Edge> listE;
+    private Dijkstra algo;
+    
+    /**
+     * Constructor of JUnit algorithm test
+    */
+    public AlgorithmJUnitTest(){ }
+    
+    /**
+     * Initialize algorithm dikjstra test and lists
+    */
     @Before
-    public void setUp() {
+    public void setUp(){
         this.listN = new ArrayList<>();
         this.listE = new ArrayList<>();
-        this.rt = null;
-        algo = new model.algorithme.Dijkstra();
+        algo = new Dijkstra();
     }
 
+    /**
+     * Test function getLength
+    */
     @Test
-    public void testGetLentgth() {
+    public void testGetLentgth(){
         Edge e1, e2, e3, e4, e5;
         Node n1 ,n2,n3,n4,n5;
         n1 = new Node(0, 100, TypeNode.NORMAL);
@@ -61,7 +59,11 @@ public class Algorithm {
         assertTrue("Error : wrong length t1.1", algo.getLength(n3, n2)==e1.getLength());
         assertTrue("Error : wrong length t1.2", algo.getLength(n2, n3)==e1.getLength());    
     }
-    public void testGetNeighbourgs() {
+    
+    /**
+     * Test function gesNeighbourgs
+    */
+    public void testGetNeighbourgs(){
         Edge e1, e2, e3, e4, e5;
         Node n1 ,n2,n3,n4,n5,n6;
         n1 = new Node(0, 100, TypeNode.NORMAL);
@@ -90,4 +92,5 @@ public class Algorithm {
         assertTrue("Error : not enough neighbours t3.0", res.size()==1);
         assertTrue("Error : wrong first child t3.1", res.contains(n3));
     }
+    
 }
