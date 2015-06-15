@@ -75,7 +75,7 @@ public class BreadthFirstSearch extends Algorithm {
                 }
             } 
         }
-        return result;
+        return null;
     }
     
     /**
