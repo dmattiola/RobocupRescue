@@ -64,7 +64,6 @@ public abstract class Robot extends Observable {
             this.getN().extinguishFire();
             this.state = StateRobot.FREE;
             this.listNodes = null;
-            System.out.println("éteint le feu");
         } else {
             // check if it remains watter on the robot
             if (this.capacity - this.getN().getFire() <= 0){

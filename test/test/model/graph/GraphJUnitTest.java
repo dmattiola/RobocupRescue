@@ -17,8 +17,6 @@ import static org.junit.Assert.*;
 public class GraphJUnitTest {
     
     private Graph g;
-    private ArrayList<Edge> listEdge;
-    private ArrayList<Node> listNode;
     
     /**
      * Constructor of JUnit graph test
@@ -31,59 +29,44 @@ public class GraphJUnitTest {
     @Before
     public void setUp(){
         g = new Graph();
-        listNode = new ArrayList<>();
+        ArrayList<Node> listNode = new ArrayList<>();
         listNode.add(new Node(0,0,TypeNode.INCENDIE));
         listNode.add(new Node(1,1,TypeNode.NORMAL));
         listNode.add(new Node(2,2,3,TypeNode.RECHARGE));
         g.setListNodes(listNode);
-        listEdge = new ArrayList<>();
+        ArrayList<Edge> listEdge = new ArrayList<>();
         listEdge.add(new Edge(listNode.get(0),listNode.get(1),TypeEdge.PLAT));
         listEdge.add(new Edge(listNode.get(1),listNode.get(2),TypeEdge.INONDE));
         g.setListEdge(listEdge);
     }
 
     /**
-     * 
+     * Test the function findEdge
     */
     @Test
     public void testFindEdge(){
-        Edge e = g.findEdge(listNode.get(0), listNode.get(1));
+        Edge e = g.findEdge(g.getListNodes().get(0), g.getListNodes().get(1));
         assertTrue("Arc trouvé", e != null);
-        e = g.findEdge(listNode.get(0), listNode.get(2));
+        e = g.findEdge(g.getListNodes().get(0), g.getListNodes().get(2));
         assertTrue("Arc non trouvé", e == null);
     }
     
+    /**
+     * Test the function loadFile 
+    */
     @Test
-    public void testLoadFile() {
+    public void testLoadFile(){
         g = g.loadFile();
         ArrayList<Node> list = g.getListNodes();
         for (Node n : list){
-            if(n.getId() == 0){
-                assertTrue("Test noeud feu 1 erreur", n.getType() == TypeNode.INCENDIE);
-                assertTrue("Test noeud feu 2 erreur", n.getFire()== 50);
-            }
-            if(n.getId() == 1){
-                System.out.println("1" + n.getType() + "1");
-                
-                assertTrue("Test noeud 1 erreur", n.getType() == TypeNode.NORMAL);
-                assertTrue("Test noeud 2 erreur", n.getFire()== 0);
-            }
+            assertTrue("Ajout d'un noeud dans le graphe", n.getType() instanceof TypeNode);
+            assertFalse("Erreur dans l'ajout du noeud du graphe", !(n.getType() instanceof TypeNode));
         }
         ArrayList<Edge> list2 = g.getListEdges();
         for (Edge e : list2){
-            if(e.getNode1().getId() == 0 && e.getNode1().getId() == 1){
-                assertTrue("Test arc 1 plat erreur", e.getType() == TypeEdge.PLAT);    
-            }
-            /*if(e.getNode1().getId() == 1 && e.getNode1().getId() == 2){
-                assertTrue("Test arc 1 plat ok", e.getType() == "PLAT");
-                
-            }
-            if(e.getNode1().getId() == 0 && e.getNode1().getId() == 1){
-                assertTrue("Test arc 1 plat ok", e.getType() == "PLAT");*/
-                
-            }
-
+            assertTrue("Ajout d'un arc dans le graphe", e.getType() instanceof TypeEdge);
+            assertFalse("Erreur dans l'ajout du arc du graphe", !(e.getType() instanceof TypeEdge));
         }
-        
     }
-
+        
+}
